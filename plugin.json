@@ -1,0 +1,9 @@
+{
+  "name": "ElasticExportGeizhalsDE",
+  "description": "This plugin adds the format GeizhalsDE to the Elastic Export.",
+  "namespace": "ElasticExportGeizhalsDE",
+  "author": "plentymarkets",
+  "type": "export",
+  "serviceProvider": "ElasticExportGeizhalsDE\\ElasticExportGeizhalsDEServiceProvider",
+  "version": 0.1
+}
