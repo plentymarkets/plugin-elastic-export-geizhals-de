@@ -135,7 +135,7 @@ class GeizhalsDE extends CSVGenerator
                     'Herstellercode' 	=> $variation['data']['variation']['model'],
                     'EAN' 				=> $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
                     'Kategorie' 		=> $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
-                    'Grundpreis' 		=> $this->elasticExportCoreHelper->getBasePrice($variation, $this->idlVariations[$variation['id']]),
+                    'Grundpreis' 		=> $this->elasticExportCoreHelper->getBasePrice($variation, $this->idlVariations[$variation['id']], $settings->get('lang')),
                 ];
 
                 $this->addCSVContent(array_values($data));

@@ -80,12 +80,6 @@ class GeizhalsDE extends ResultFields
          */
         $languageMutator = pluginApp(LanguageMutator::class, [[$settings->get('lang')]]);
 
-        /**
-         * @var SkuMutator $skuMutator
-         */
-        $skuMutator = pluginApp(SkuMutator::class);
-        $skuMutator->setMarket($reference);
-
         $fields = [
             [
                 //item
@@ -96,9 +90,7 @@ class GeizhalsDE extends ResultFields
                 'id',
                 'variation.availability.id',
                 'variation.stockLimitation',
-                //'variation.vatId',
                 'variation.model',
-                //'variation.isMain',
 
                 //images
                 'images.item.type',
@@ -112,13 +104,8 @@ class GeizhalsDE extends ResultFields
                 'unit.content',
                 'unit.id',
 
-                //sku
-                //'skus.sku',
-
                 //defaultCategories
                 'defaultCategories.id',
-                //'defaultCategories.plentyId',
-                //'defaultCategories.manually',
 
                 //barcodes
                 'barcodes.code',
@@ -134,7 +121,6 @@ class GeizhalsDE extends ResultFields
             [
                 $imageMutator,
                 $languageMutator,
-                $skuMutator
             ],
         ];
 
@@ -144,87 +130,5 @@ class GeizhalsDE extends ResultFields
         }
 
         return $fields;
-
-        /*
-        $fields = [
-            'itemBase'=> [
-                'id',   //done
-                'producerId',//done
-            ],
-
-            'itemDescription' => [
-                'params' => [
-                    'language' => $settings->get('lang') ? $settings->get('lang') : 'de',
-                ],
-                'fields' => $itemDescriptionFields, //done
-            ],
-
-            'variationImageList' => [
-                'params' => [
-                    'type' => 'item_variation',
-                    'referenceMarketplace' => $settings->get('referrerId') ? $settings->get('referrerId') : -1,
-                ],
-                'fields' => [ //done
-                    'type',
-                    'path',
-                    'position',
-                ]
-            ],
-
-            'variationBase' => [
-                'availability',//done
-                'attributeValueSetId',//done
-                'model',//done
-                'limitOrderByStockSelect',
-                'unitId',
-                'content',
-            ],
-
-            'variationStock' => [  //TODO idl
-                'params' => [
-                    'type' => 'virtual',
-                ],
-                'fields' => [
-                    'stockNet'
-                ]
-            ],
-
-            'variationRetailPrice' => [
-                'params' => [
-                    'referrerId' => $settings->get('referrerId'),
-                ],
-                'fields' => [
-                    'price',
-                ],
-            ],
-
-            'variationStandardCategory' => [
-                'params' => [
-                    'plentyId' => $settings->get('plentyId'),
-                ],
-                'fields' => [
-                    'categoryId',
-                    'plentyId',
-                    'manually',
-                ],
-            ],
-
-            'variationBarcodeList' => [
-                'params' => [
-                    'barcodeType' => $settings->get('barcode') ? $settings->get('barcode') : 'EAN',
-                ],
-                'fields' => [
-                    'code',
-                    'barcodeId',
-                ]
-            ],
-
-            'variationAttributeValueList' => [
-                'attributeId',
-                'attributeValueId',
-            ],
-        ];
-        */
-
     }
 }
