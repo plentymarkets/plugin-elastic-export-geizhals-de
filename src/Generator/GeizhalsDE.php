@@ -126,7 +126,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
                 $data = [
                     'Hersteller' 		=> $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
-                    'Produktcode' 		=> $variation['data']['item']['id'],
+                    'Produktcode' 		=> $variation['id'],
                     'Bezeichnung' 		=> $this->elasticExportCoreHelper->getName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
                     'Preis' 			=> number_format((float)$this->idlVariations[$variation['id']]['variationRetailPrice.price'], 2, '.', ''),
                     'Deeplink' 			=> $this->elasticExportCoreHelper->getUrl($variation, $settings, true, false),
