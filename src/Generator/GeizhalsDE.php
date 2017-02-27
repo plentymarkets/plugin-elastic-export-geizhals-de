@@ -2,13 +2,12 @@
 
 namespace ElasticExportGeizhalsDE\Generator;
 
-use ElasticExportCore\Helper\ElasticExportCoreHelper;
-use Plenty\Modules\DataExchange\Contracts\CSVGenerator;
+use ElasticExport\Helper\ElasticExportCoreHelper;
+use Plenty\Modules\DataExchange\Contracts\CSVPluginGenerator;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
 use Plenty\Modules\Item\DataLayer\Models\Record;
 use Plenty\Modules\Item\DataLayer\Models\RecordList;
-use Plenty\Modules\DataExchange\Models\FormatSetting;
 use Plenty\Modules\Order\Payment\Method\Models\PaymentMethod;
 
 
@@ -16,7 +15,7 @@ use Plenty\Modules\Order\Payment\Method\Models\PaymentMethod;
  * Class GeizhalsDE
  * @package ElasticExportGeizhalsDE\Generator
  */
-class GeizhalsDE extends CSVGenerator
+class GeizhalsDE extends CSVPluginGenerator
 {
     /**
      * @var ElasticExportCoreHelper
@@ -35,21 +34,23 @@ class GeizhalsDE extends CSVGenerator
 
     /**
      * GeizhalsDE constructor.
-     * @param ElasticExportCoreHelper $elasticExportCoreHelper
      * @param ArrayHelper $arrayHelper
      */
-    public function __construct(ElasticExportCoreHelper $elasticExportCoreHelper, ArrayHelper $arrayHelper)
+    public function __construct(ArrayHelper $arrayHelper)
     {
-        $this->elasticExportCoreHelper = $elasticExportCoreHelper;
         $this->arrayHelper = $arrayHelper;
     }
 
     /**
+     * Generates and populates the data into the CSV file.
      * @param array $resultData
      * @param array $formatSettings
+     * @param array $filter
      */
-    protected function generateContent($resultData, array $formatSettings = [])
+    protected function generatePluginContent($resultData, array $formatSettings = [], array $filter = [])
     {
+        $this->elasticExportCoreHelper = pluginApp(ElasticExportCoreHelper::class);
+
         if(is_array($resultData) && count($resultData['documents']) > 0)
         {
             $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
@@ -85,7 +86,7 @@ class GeizhalsDE extends CSVGenerator
                  * @var \ElasticExportGeizhalsDE\IDL_ResultList\GeizhalsDE $idlResultList
                  */
                 $idlResultList = pluginApp(\ElasticExportGeizhalsDE\IDL_ResultList\GeizhalsDE::class);
-                $idlResultList = $idlResultList->getResultList($variationIdList, $settings);
+                $idlResultList = $idlResultList->getResultList($variationIdList, $settings, $filter);
             }
 
             //Creates an array with the variationId as key to surpass the sorting problem
@@ -188,7 +189,7 @@ class GeizhalsDE extends CSVGenerator
     }
 
     /**
-     * Returns an array with the IDL values.
+     * Creates an array with the rest of data needed from the ItemDataLayer.
      * @param RecordList $idlResultList
      */
     private function createIdlArray($idlResultList)

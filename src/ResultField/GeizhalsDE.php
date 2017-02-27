@@ -7,7 +7,6 @@ use Plenty\Modules\DataExchange\Models\FormatSetting;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Item\Search\Mutators\ImageMutator;
 use Plenty\Modules\Cloud\ElasticSearch\Lib\Source\Mutator\BuiltIn\LanguageMutator;
-use Plenty\Modules\Item\Search\Mutators\SkuMutator;
 
 
 /**
@@ -23,7 +22,6 @@ class GeizhalsDE extends ResultFields
 
     /**
      * GeizhalsDE constructor.
-     *
      * @param ArrayHelper $arrayHelper
      */
     public function __construct(ArrayHelper $arrayHelper)
@@ -32,8 +30,7 @@ class GeizhalsDE extends ResultFields
     }
 
     /**
-     * Generate result fields.
-     *
+     * Creates the fields set to be retrieved from ElasticSearch.
      * @param  array $formatSettings = []
      * @return array
      */
@@ -73,13 +70,17 @@ class GeizhalsDE extends ResultFields
          * @var ImageMutator $imageMutator
          */
         $imageMutator = pluginApp(ImageMutator::class);
-        $imageMutator->addMarket($reference);
+        if($imageMutator instanceof ImageMutator)
+        {
+            $imageMutator->addMarket($reference);
+        }
 
         /**
          * @var LanguageMutator $languageMutator
          */
         $languageMutator = pluginApp(LanguageMutator::class, [[$settings->get('lang')]]);
 
+        //Fields
         $fields = [
             [
                 //item
@@ -126,6 +127,7 @@ class GeizhalsDE extends ResultFields
 
         foreach($itemDescriptionFields as $itemDescriptionField)
         {
+            //texts
             $fields[0][] = $itemDescriptionField;
         }
 

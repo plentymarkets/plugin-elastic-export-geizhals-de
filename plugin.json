@@ -1,9 +1,20 @@
 {
   "name": "ElasticExportGeizhalsDE",
-  "description": "This plugin adds the format GeizhalsDE to the Elastic Export.",
   "namespace": "ElasticExportGeizhalsDE",
-  "author": "plentymarkets",
   "type": "export",
-  "serviceProvider": "ElasticExportGeizhalsDE\\ElasticExportGeizhalsDEServiceProvider",
-  "version": 0.1
+  "version": "1.0.0",
+  "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007",
+  "pluginIcon": "icon_plugin_md.png",
+  "price": 0.00,
+  "description": "This plugin adds the format Geizhals.de to the Elastic Export.",
+  "shortDescription": {
+    "de": "Das Plugin ElasticExportGeizhalsDE fügt das Datenformat Geizhals.de zum Elastischen Export hinzu.",
+    "en": "This plugin adds the format Geizhals.de to the Elastic Export."
+  },
+  "categories": [
+    "3523"
+  ],
+  "author": "plentymarkets GmbH",
+  "authorIcon": "icon_author_xs.png",
+  "serviceProvider": "ElasticExportGeizhalsDE\\ElasticExportGeizhalsDEServiceProvider"
 }

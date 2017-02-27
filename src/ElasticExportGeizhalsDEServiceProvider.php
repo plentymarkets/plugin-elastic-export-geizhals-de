@@ -29,7 +29,7 @@ class ElasticExportGeizhalsDEServiceProvider extends DataExchangeServiceProvider
             'GeizhalsDE-Plugin',
             'ElasticExportGeizhalsDE\ResultField\GeizhalsDE',
             'ElasticExportGeizhalsDE\Generator\GeizhalsDE',
-            'ElasticExportGeizhalsDE\Filter\GeizhalsDE',
+            '',
             true
         );
     }
