@@ -1,4 +1,4 @@
-plentymarkets plugin Elastic Export Geizhals.de
+plentymarkets plugin ElasticExportGeizhalsDE
 
 Copyright © 2016 plentymarkets GmbH
 
