@@ -1,5 +1,5 @@
 
-# User Guide für das Elastic Export Geizhals.de Plugin
+# User Guide für das ElasticExportGeizhalsDE Plugin
 
 <div class="container-toc"></div>
 
@@ -11,7 +11,7 @@ Der Geizhals-Preisvergleich ist eine unabhängige Preisvergleichs- und Informati
 
 Um dieses Format nutzen zu können, benötigen Sie das Plugin Elastic Export.
 
-Nachdem Sie das Elastic Export Geizhals.de Plugin im plentyMarketplace gekauft haben, richten Sie das Exportformat wie auf der Handbuchseite [Daten exportieren](https://www.plentymarkets.eu/handbuch/datenaustausch/daten-exportieren/#4) beschrieben ein.
+Nachdem Sie das ElasticExportGeizhalsDE Plugin im plentyMarketplace gekauft haben, richten Sie das Exportformat wie auf der Handbuchseite [Daten exportieren](https://www.plentymarkets.eu/handbuch/datenaustausch/daten-exportieren/#4) beschrieben ein.
 
 ## Lizenz
 
