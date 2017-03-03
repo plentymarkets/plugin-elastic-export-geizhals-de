@@ -8,7 +8,7 @@
   "price": 0.00,
   "description": "This plugin adds the format Geizhals.de to the Elastic Export.",
   "shortDescription": {
-    "de": "Das Plugin ElasticExportGeizhalsDE fügt das Datenformat Geizhals.de zum Elastischen Export hinzu.",
+    "de": "Das Plugin ElasticExportGeizhalsDE fügt das Datenformat GeizhalsDE-Plugin zum Elastischen Export hinzu.",
     "en": "This plugin adds the format Geizhals.de to the Elastic Export."
   },
   "categories": [
