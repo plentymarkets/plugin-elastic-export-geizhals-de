@@ -1,6 +1,6 @@
 ## Web page
  
-https://www.plentymarkets.eu/
+[https://www.plentymarkets.eu/](https://www.plentymarkets.eu/)
 
 ## Help us to make this plugin even better
 
