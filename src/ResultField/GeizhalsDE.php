@@ -65,16 +65,6 @@ class GeizhalsDE extends ResultFields
             $itemDescriptionFields[] = 'texts.technicalData';
         }
 
-        //Mutator
-        /**
-         * @var ImageMutator $imageMutator
-         */
-        $imageMutator = pluginApp(ImageMutator::class);
-        if($imageMutator instanceof ImageMutator)
-        {
-            $imageMutator->addMarket($reference);
-        }
-
         /**
          * @var LanguageMutator $languageMutator
          */
@@ -90,16 +80,7 @@ class GeizhalsDE extends ResultFields
                 //variation
                 'id',
                 'variation.availability.id',
-                'variation.stockLimitation',
                 'variation.model',
-
-                //images
-                'images.item.type',
-                'images.item.path',
-                'images.item.position',
-                'images.variation.type',
-                'images.variation.path',
-                'images.variation.position',
 
                 //unit
                 'unit.content',
@@ -120,8 +101,7 @@ class GeizhalsDE extends ResultFields
             ],
 
             [
-                $imageMutator,
-                $languageMutator,
+                $languageMutator
             ],
         ];
 

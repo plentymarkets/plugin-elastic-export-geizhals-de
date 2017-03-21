@@ -97,11 +97,6 @@ class GeizhalsDE extends CSVPluginGenerator
 
             foreach($resultData['documents'] as $variation)
             {
-                if(!$this->valid($variation))
-                {
-                    continue;
-                }
-
                 $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
                 $paymentInAdvance = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
                 $cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
@@ -142,21 +137,6 @@ class GeizhalsDE extends CSVPluginGenerator
                 $this->addCSVContent(array_values($data));
             }
         }
-    }
-
-    /**
-     * Check if item is valid.
-     * @param  array $variation
-     * @return bool
-     */
-    private function valid($variation):bool
-    {
-        if($this->idlVariations[$variation['id']]['variationStock.stockNet'] <= 0 && $variation['data']['variation']['stockLimitation'] == 1)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /**

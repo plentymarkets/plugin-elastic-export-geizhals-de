@@ -1,5 +1,11 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.0.2 (2017-03-21)
+
+### Deleted
+- Removed the predefined condition for invalid variations.
+- Removed the imageMutator from the ResultField class, because is not necessarily in the export.
+
 ## v1.0.1 (2017-03-14)
 
 ### Added
