@@ -1,5 +1,11 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.3 (2017-04-20)
+
+### Geändert
+- Das Format funktioniert nun komplett über Elastic Search.
+- Die Performance wurde verbessert.
+
 ## v1.0.2 (2017-03-21)
 
 ### Entfernt
