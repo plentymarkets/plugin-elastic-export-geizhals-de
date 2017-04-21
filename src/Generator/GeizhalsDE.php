@@ -119,7 +119,7 @@ class GeizhalsDE extends CSVPluginGenerator
                         }
                         catch(\Throwable $throwable)
                         {
-                            $this->getLogger(__METHOD__)->error('ElasticExportGoogleShopping::logs.fillRowError', [
+                            $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::logs.fillRowError', [
                                 'Error message ' => $throwable->getMessage(),
                                 'Error line'    => $throwable->getLine(),
                                 'VariationId'   => $variation['id']
