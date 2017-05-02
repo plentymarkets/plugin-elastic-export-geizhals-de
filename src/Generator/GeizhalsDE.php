@@ -133,6 +133,10 @@ class GeizhalsDE extends CSVPluginGenerator
         }
     }
 
+	/**
+	 * @param $variation
+	 * @param $settings
+	 */
     private function buildRow($variation, $settings)
     {
         $price = $this->priceHelper->getPrice($variation, $settings);

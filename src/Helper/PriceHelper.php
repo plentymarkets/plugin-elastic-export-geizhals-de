@@ -23,7 +23,7 @@ class PriceHelper
     }
 
     /**
-     * Get a List of price, reduced price and the reference for the reduced price.
+     * Gets the price.
      * @param array $variation
      * @param KeyValue $settings
      * @return array
@@ -32,10 +32,8 @@ class PriceHelper
     {
         $variationPrice = 0.00;
         //getting the retail price
-        /**
-         * SalesPriceSearchRequest $salesPriceSearchRequest
-         */
-        $salesPriceSearchRequest = pluginApp(SalesPriceSearchRequest::class);
+
+		$salesPriceSearchRequest = pluginApp(SalesPriceSearchRequest::class);
         if($salesPriceSearchRequest instanceof SalesPriceSearchRequest)
         {
             $salesPriceSearchRequest->variationId = $variation['id'];
