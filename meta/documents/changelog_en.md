@@ -5,6 +5,7 @@
 ### Changed
 - This plugin works now with elastic search only.
 - The performance has been improved.
+- Outsourced the stock filter logic to the Elastic Export plugin.
 
 ## v1.0.2 (2017-03-21)
 

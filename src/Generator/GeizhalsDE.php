@@ -3,8 +3,8 @@
 namespace ElasticExportGeizhalsDE\Generator;
 
 use ElasticExport\Helper\ElasticExportCoreHelper;
+use ElasticExport\Helper\ElasticExportStockHelper;
 use ElasticExportGeizhalsDE\Helper\PriceHelper;
-use ElasticExportGeizhalsDE\Helper\StockHelper;
 use Plenty\Modules\DataExchange\Contracts\CSVPluginGenerator;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
@@ -31,29 +31,30 @@ class GeizhalsDE extends CSVPluginGenerator
     private $arrayHelper;
 
     /**
-     * @var StockHelper
-     */
-    private $stockHelper;
-
-    /**
      * @var PriceHelper
      */
     private $priceHelper;
 
-    /**
-     * GeizhalsDE constructor.
-     * @param ArrayHelper $arrayHelper
-     * @param StockHelper $stockHelper
-     * @param PriceHelper $priceHelper
-     */
+	/**
+	 * @var ElasticExportStockHelper $elasticExportStockHelper
+	 */
+	private $elasticExportStockHelper;
+
+	/**
+	 * GeizhalsDE constructor.
+	 * @param ArrayHelper $arrayHelper
+	 * @param PriceHelper $priceHelper
+	 * @param ElasticExportStockHelper $elasticExportStockHelper
+	 */
     public function __construct(
         ArrayHelper $arrayHelper,
-        StockHelper $stockHelper,
-        PriceHelper $priceHelper)
+        PriceHelper $priceHelper,
+		ElasticExportStockHelper $elasticExportStockHelper
+	)
     {
         $this->arrayHelper = $arrayHelper;
-        $this->stockHelper = $stockHelper;
         $this->priceHelper = $priceHelper;
+		$this->elasticExportStockHelper = $elasticExportStockHelper;
     }
 
     /**
@@ -108,7 +109,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
                     if(is_array($resultList['documents']) && count($resultList['documents']) > 0)
                     {
-                        if($this->stockHelper->isFilteredByStock($variation, $filter) === true)
+                        if($this->elasticExportStockHelper->isFilteredByStock($variation, $filter) === true)
                         {
                             continue;
                         }

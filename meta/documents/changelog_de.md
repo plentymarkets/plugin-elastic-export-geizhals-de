@@ -5,6 +5,7 @@
 ### Geändert
 - Das Format funktioniert nun komplett über Elastic Search.
 - Die Performance wurde verbessert.
+- Die Bestandsfilterlogik wurde in das Elastic Export-Plugin ausgelagert.
 
 ## v1.0.2 (2017-03-21)
 
