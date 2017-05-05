@@ -41,6 +41,21 @@ class GeizhalsDE extends CSVPluginGenerator
 	private $elasticExportStockHelper;
 
 	/**
+	 * @var array
+	 */
+	private $paymentInAdvanceCache;
+
+	/**
+	 * @var array
+	 */
+	private $cashOnDeliveryCache;
+
+	/**
+	 * @var array
+	 */
+	private $manufacturerCache;
+
+	/**
 	 * GeizhalsDE constructor.
 	 * @param ArrayHelper $arrayHelper
 	 * @param PriceHelper $priceHelper
@@ -141,8 +156,36 @@ class GeizhalsDE extends CSVPluginGenerator
     {
         $price = $this->priceHelper->getPrice($variation, $settings);
         $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
-        $paymentInAdvance = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
-        $cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
+
+        if(array_key_exists($variation['data']['item']['id'], $this->paymentInAdvanceCache))
+        {
+        	$paymentInAdvance = $this->paymentInAdvanceCache[$variation['data']['item']['id']];
+		}
+		else
+		{
+			$paymentInAdvance = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
+			$this->paymentInAdvanceCache[$variation['data']['item']['id']] = $paymentInAdvance;
+		}
+
+		if(array_key_exists($variation['data']['item']['id'], $this->cashOnDeliveryCache))
+		{
+			$cashOnDelivery = $this->cashOnDeliveryCache[$variation['data']['item']['id']];
+		}
+		else
+		{
+			$cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
+			$this->cashOnDeliveryCache[$variation['data']['item']['id']] = $cashOnDelivery;
+		}
+
+		if(array_key_exists($variation['data']['item']['id'], $this->manufacturerCache))
+		{
+			$manufacturer = $this->manufacturerCache[$variation['data']['item']['id']];
+		}
+		else
+		{
+			$manufacturer = $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']);
+			$this->manufacturerCache[$variation['data']['item']['id']] = $manufacturer;
+		}
 
         if(!is_null($paymentInAdvance) && !is_null($price['variationRetailPrice.price']))
         {
@@ -163,7 +206,7 @@ class GeizhalsDE extends CSVPluginGenerator
         }
 
         $data = [
-            'Hersteller' 		=> $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
+            'Hersteller' 		=> $manufacturer,
             'Produktcode' 		=> $variation['id'],
             'Bezeichnung' 		=> $this->elasticExportCoreHelper->getName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
             'Preis' 			=> $price != null ? $price['variationRetailPrice.price'] : number_format((float)$price['variationRetailPrice.price'], 2, '.', ''),
