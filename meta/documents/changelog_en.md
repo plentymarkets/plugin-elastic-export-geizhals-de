@@ -1,5 +1,12 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.0.3 (2017-04-20)
+
+### Changed
+- This plugin works now with elastic search only.
+- The performance has been improved.
+- Outsourced the stock filter logic to the Elastic Export plugin.
+
 ## v1.0.2 (2017-03-21)
 
 ### Deleted

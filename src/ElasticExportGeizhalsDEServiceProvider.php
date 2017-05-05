@@ -3,16 +3,17 @@
 namespace ElasticExportGeizhalsDE;
 
 use Plenty\Modules\DataExchange\Services\ExportPresetContainer;
-use Plenty\Plugin\DataExchangeServiceProvider;
+use Plenty\Plugin\ServiceProvider;
 
 /**
  * Class ElasticExportGeizhalsDEServiceProvider
  * @package ElasticExportGeizhalsDE
  */
-class ElasticExportGeizhalsDEServiceProvider extends DataExchangeServiceProvider
+class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
 {
     /**
      * Abstract function for registering the service provider.
+     * @return void
      */
     public function register()
     {
@@ -23,13 +24,14 @@ class ElasticExportGeizhalsDEServiceProvider extends DataExchangeServiceProvider
      * Adds the export format to the export container.
      * @param ExportPresetContainer $container
      */
-    public function exports(ExportPresetContainer $container)
+    public function boot(ExportPresetContainer $container)
     {
         $container->add(
             'GeizhalsDE-Plugin',
             'ElasticExportGeizhalsDE\ResultField\GeizhalsDE',
             'ElasticExportGeizhalsDE\Generator\GeizhalsDE',
             '',
+            true,
             true
         );
     }
