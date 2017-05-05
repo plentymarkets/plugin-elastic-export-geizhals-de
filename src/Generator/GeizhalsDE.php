@@ -59,17 +59,14 @@ class GeizhalsDE extends CSVPluginGenerator
 	 * GeizhalsDE constructor.
 	 * @param ArrayHelper $arrayHelper
 	 * @param PriceHelper $priceHelper
-	 * @param ElasticExportStockHelper $elasticExportStockHelper
 	 */
     public function __construct(
         ArrayHelper $arrayHelper,
-        PriceHelper $priceHelper,
-		ElasticExportStockHelper $elasticExportStockHelper
+        PriceHelper $priceHelper
 	)
     {
         $this->arrayHelper = $arrayHelper;
         $this->priceHelper = $priceHelper;
-		$this->elasticExportStockHelper = $elasticExportStockHelper;
     }
 
     /**
@@ -80,6 +77,7 @@ class GeizhalsDE extends CSVPluginGenerator
      */
     protected function generatePluginContent($elasticSearch, array $formatSettings = [], array $filter = [])
     {
+    	$this->elasticExportStockHelper = pluginApp(ElasticExportStockHelper::class);
         $this->elasticExportCoreHelper = pluginApp(ElasticExportCoreHelper::class);
 
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
