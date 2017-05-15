@@ -1,5 +1,12 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.5 (2017-05-15)
+
+### Behoben
+- Der Bestand wird nun korrekt ausgewertet.
+- Es wurde ein Fehler behoben, bei dem Varianten nicht in der richtigen Reihenfolge gelisted wurde.
+- Es wurde ein Fehler behoben, der dazu geführt hat, dass das Exportformat Texte in der falschen Sprache exportierte.
+
 ## v1.0.4 (2017-05-05)
 
 ### Behoben

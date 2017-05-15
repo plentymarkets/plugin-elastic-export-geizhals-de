@@ -2,6 +2,7 @@
 
 namespace ElasticExportGeizhalsDE\ResultField;
 
+use Plenty\Modules\Cloud\ElasticSearch\Lib\ElasticSearch;
 use Plenty\Modules\DataExchange\Contracts\ResultFields;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Item\Search\Mutators\DefaultCategoryMutator;
@@ -37,7 +38,10 @@ class GeizhalsDE extends ResultFields
     {
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
 
-        $itemDescriptionFields = ['texts.urlPath'];
+        $this->setOrderByList(['item.id', ElasticSearch::SORTING_ORDER_ASC]);
+
+        $itemDescriptionFields = ['texts.urlPath', 'texts.lang'];
+
         $itemDescriptionFields[] = ($settings->get('nameId')) ? 'texts.name' . $settings->get('nameId') : 'texts.name1';
 
         if($settings->get('descriptionType') == 'itemShortDescription'
@@ -63,7 +67,6 @@ class GeizhalsDE extends ResultFields
         }
 
         //Mutator
-
         /**
          * @var KeyMutator
          */
@@ -137,6 +140,7 @@ class GeizhalsDE extends ResultFields
     }
 
     /**
+     * Returns the list of keys.
      * @return array
      */
     private function getKeyList()
@@ -157,6 +161,10 @@ class GeizhalsDE extends ResultFields
         ];
     }
 
+    /**
+     * Returns the list of nested keys.
+     * @return array
+     */
     private function getNestedKeyList()
     {
         return [
@@ -170,7 +178,7 @@ class GeizhalsDE extends ResultFields
                 // Default categories
                 'defaultCategories',
 
-                //texts
+                // Texts
                 'texts',
             ],
 
@@ -193,9 +201,10 @@ class GeizhalsDE extends ResultFields
                     'id'
                 ],
 
-                // texts
+                // Texts
                 'texts' => [
                     'urlPath',
+                    'lang',
                     'name1',
                     'name2',
                     'name3',
