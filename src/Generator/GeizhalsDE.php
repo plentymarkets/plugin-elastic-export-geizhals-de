@@ -59,6 +59,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
 	/**
 	 * GeizhalsDE constructor.
+     *
 	 * @param ArrayHelper $arrayHelper
 	 * @param PriceHelper $priceHelper
 	 */
@@ -73,6 +74,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
     /**
      * Generates and populates the data into the CSV file.
+     *
      * @param VariationElasticSearchScrollRepositoryContract $elasticSearch
      * @param array $formatSettings
      * @param array $filter
@@ -180,6 +182,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
     /**
      * Creates the header of the CSV file.
+     *
      * @return array
      */
     private function head():array
@@ -191,7 +194,7 @@ class GeizhalsDE extends CSVPluginGenerator
             'Preis',
             'Deeplink',
             'Vorkasse',
-            'Nachnahme',
+            'Nachname',
             'Verfügbarkeit',
             'Herstellercode',
             'EAN',
@@ -202,6 +205,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
     /**
      * Creates the variation row and prints it into the CSV file.
+     *
      * @param $variation
      * @param KeyValue $settings
      */
@@ -270,7 +274,7 @@ class GeizhalsDE extends CSVPluginGenerator
                 'Preis' 			=> number_format((float)$price['variationRetailPrice.price'], 2, '.', ''),
                 'Deeplink' 			=> $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
                 'Vorkasse' 			=> $paymentInAdvance,
-                'Nachnahme' 		=> $cashOnDelivery,
+                'Nachname' 		    => $cashOnDelivery,
                 'Verfügbarkeit' 	=> $this->elasticExportCoreHelper->getAvailability($variation, $settings),
                 'Herstellercode' 	=> $variation['data']['variation']['model'],
                 'EAN' 				=> $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
@@ -290,6 +294,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
     /**
      * Get payement extra charge.
+     *
      * @param  array    $price
      * @param  KeyValue $settings
      * @param  int      $paymentMethodId

@@ -22,6 +22,7 @@ class GeizhalsDE extends ResultFields
 
     /**
      * GeizhalsDE constructor.
+     *
      * @param ArrayHelper $arrayHelper
      */
     public function __construct(ArrayHelper $arrayHelper)
@@ -31,6 +32,7 @@ class GeizhalsDE extends ResultFields
 
     /**
      * Creates the fields set to be retrieved from ElasticSearch.
+     *
      * @param  array $formatSettings = []
      * @return array
      */
@@ -141,21 +143,22 @@ class GeizhalsDE extends ResultFields
 
     /**
      * Returns the list of keys.
+     *
      * @return array
      */
     private function getKeyList()
     {
         return [
-            // Item
+            //item
             'item.id',
             'item.manufacturer.id',
 
-            // Variation
+            //variation
             'variation.availability.id',
             'variation.model',
             'variation.stockLimitation',
 
-            // Unit
+            //unit
             'unit.content',
             'unit.id',
         ];
@@ -163,45 +166,42 @@ class GeizhalsDE extends ResultFields
 
     /**
      * Returns the list of nested keys.
+     *
      * @return array
      */
     private function getNestedKeyList()
     {
         return [
             'keys' => [
-                // Attributes
+                //attributes
                 'attributes',
 
-                // Barcodes
+                //barcodes
                 'barcodes',
 
-                // Default categories
+                //defaultCategories
                 'defaultCategories',
 
-                // Texts
+                //texts
                 'texts',
             ],
 
             'nestedKeys' => [
-                // Attributes
                 'attributes' => [
                     'attributeValueSetId',
                     'attributeId',
                     'valueId'
                 ],
 
-                // Barcodes
                 'barcodes' => [
                     'code',
                     'type'
                 ],
 
-                // Default categories
                 'defaultCategories' => [
                     'id'
                 ],
 
-                // Texts
                 'texts' => [
                     'urlPath',
                     'lang',

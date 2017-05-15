@@ -7,6 +7,10 @@ use Plenty\Modules\Item\SalesPrice\Contracts\SalesPriceSearchRepositoryContract;
 use Plenty\Modules\Item\SalesPrice\Models\SalesPriceSearchRequest;
 use Plenty\Modules\Item\SalesPrice\Models\SalesPriceSearchResponse;
 
+/**
+ * Class PriceHelper
+ * @package ElasticExportGeizhalsDE\Helper
+ */
 class PriceHelper
 {
     /**
@@ -21,6 +25,7 @@ class PriceHelper
 
     /**
      * PriceHelper constructor.
+     *
      * @param SalesPriceSearchRepositoryContract $salesPriceSearchRepositoryContract
      * @param SalesPriceSearchRequest $salesPriceSearchRequest
      */
@@ -34,6 +39,7 @@ class PriceHelper
 
     /**
      * Gets the price.
+     *
      * @param array $variation
      * @param KeyValue $settings
      * @return array
