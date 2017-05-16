@@ -1,6 +1,6 @@
 # Release Notes for Elastic Export Geizhals.de
 
-## v1.0.5 (2017-05-15)
+## v1.0.5 (2017-05-16)
 
 ### Fixed
 - An issue was fixed which caused the stock filter not to be correctly evaluated.
