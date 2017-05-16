@@ -131,7 +131,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
                 if(is_array($resultList['documents']) && count($resultList['documents']) > 0)
                 {
-                    $previous = null;
+                    $previousId = null;
 
                     foreach($resultList['documents'] as $variation)
                     {
@@ -155,9 +155,9 @@ class GeizhalsDE extends CSVPluginGenerator
                         try
                         {
                             // Set the caches if we have the first variation or when we have the first variation of an item
-                            if($previous === null || $previous['data']['item']['id'] != $variation['data']['item']['id'])
+                            if($previousId === null || $previousId != $variation['data']['item']['id'])
                             {
-                                $previous = $variation;
+                                $previousId = $variation['data']['item']['id'];
                                 unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache, $this->manufacturerCache);
 
                                 // Build the caches arrays
