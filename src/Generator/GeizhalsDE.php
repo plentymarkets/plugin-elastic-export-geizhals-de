@@ -131,6 +131,8 @@ class GeizhalsDE extends CSVPluginGenerator
 
                 if(is_array($resultList['documents']) && count($resultList['documents']) > 0)
                 {
+                    $previous = null;
+
                     foreach($resultList['documents'] as $variation)
                     {
                         // Stop and set the flag if limit is reached
@@ -152,6 +154,17 @@ class GeizhalsDE extends CSVPluginGenerator
 
                         try
                         {
+                            // Set the caches if we have the first variation or when we have the first variation of an item
+                            if($previous === null || $previous['data']['item']['id'] != $variation['data']['item']['id'])
+                            {
+                                $previous = $variation;
+                                unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache, $this->manufacturerCache);
+
+                                // Build the caches arrays
+                                $this->buildCaches($variation, $settings);
+                            }
+
+                            // Build the new row for printing in the CSV file
                             $this->buildRow($variation, $settings);
                         }
                         catch(\Throwable $throwable)
@@ -219,53 +232,11 @@ class GeizhalsDE extends CSVPluginGenerator
         {
             $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
 
-            if(array_key_exists($variation['data']['item']['id'], $this->paymentInAdvanceCache))
-            {
-                $paymentInAdvance = $this->paymentInAdvanceCache[$variation['data']['item']['id']];
-            }
-            else
-            {
-                $paymentInAdvance = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
-                $this->paymentInAdvanceCache[$variation['data']['item']['id']] = $paymentInAdvance;
-            }
+            $paymentInAdvance = $this->getPaymentInAdvance($variation, $price['variationRetailPrice.price'], $settings);
 
-            if(array_key_exists($variation['data']['item']['id'], $this->cashOnDeliveryCache))
-            {
-                $cashOnDelivery = $this->cashOnDeliveryCache[$variation['data']['item']['id']];
-            }
-            else
-            {
-                $cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
-                $this->cashOnDeliveryCache[$variation['data']['item']['id']] = $cashOnDelivery;
-            }
+            $cashOnDelivery = $this->getCashOnDelivery($variation, $price['variationRetailPrice.price'], $settings);
 
-            if(array_key_exists($variation['data']['item']['id'], $this->manufacturerCache))
-            {
-                $manufacturer = $this->manufacturerCache[$variation['data']['item']['id']];
-            }
-            else
-            {
-                $manufacturer = $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']);
-                $this->manufacturerCache[$variation['data']['item']['id']] = $manufacturer;
-            }
-
-            if(!is_null($paymentInAdvance))
-            {
-                $paymentInAdvance = number_format((float)$paymentInAdvance + $this->getPaymentShippingExtraCharge($price['variationRetailPrice.price'], $settings, 0), 2, '.', '');
-            }
-            else
-            {
-                $paymentInAdvance = '';
-            }
-
-            if(!is_null($cashOnDelivery))
-            {
-                $cashOnDelivery = number_format((float)$cashOnDelivery + $this->getPaymentShippingExtraCharge($price['variationRetailPrice.price'], $settings, 1), 2, '.', '');
-            }
-            else
-            {
-                $cashOnDelivery = '';
-            }
+            $manufacturer = $this->getManufacturer($variation);
 
             $data = [
                 'Hersteller' 		=> $manufacturer,
@@ -320,5 +291,91 @@ class GeizhalsDE extends CSVPluginGenerator
         }
 
         return 0.0;
+    }
+
+    /**
+     * Build the cache arrays for the item variation.
+     *
+     * @param $variation
+     * @param $settings
+     */
+    private function buildCaches($variation, $settings)
+    {
+        if(!is_null($variation) && !is_null($variation['data']['item']['id']))
+        {
+            $this->paymentInAdvanceCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
+
+            $this->cashOnDeliveryCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
+
+            $this->manufacturerCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']);
+        }
+    }
+
+    /**
+     * Get the payment in advance.
+     *
+     * @param $variation
+     * @return mixed|null|string
+     */
+    private function getPaymentInAdvance($variation, $price, $settings)
+    {
+        $paymentInAdvance = null;
+        if(isset($this->paymentInAdvanceCache) && array_key_exists($variation['data']['item']['id'], $this->paymentInAdvanceCache))
+        {
+            $paymentInAdvance = $this->paymentInAdvanceCache[$variation['data']['item']['id']];
+        }
+
+        if(!is_null($paymentInAdvance))
+        {
+            $paymentInAdvance = number_format((float)$paymentInAdvance + $this->getPaymentShippingExtraCharge($price, $settings, 0), 2, '.', '');
+            return $paymentInAdvance;
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the cash on delivery.
+     *
+     * @param $variation
+     * @return mixed|null|string
+     */
+    private function getCashOnDelivery($variation, $price, $settings)
+    {
+        $cashOnDelivery = null;
+        if(isset($this->cashOnDeliveryCache) && array_key_exists($variation['data']['item']['id'], $this->cashOnDeliveryCache))
+        {
+            $cashOnDelivery = $this->cashOnDeliveryCache[$variation['data']['item']['id']];
+        }
+
+        if(!is_null($cashOnDelivery))
+        {
+            $cashOnDelivery = number_format((float)$cashOnDelivery + $this->getPaymentShippingExtraCharge($price, $settings, 1), 2, '.', '');
+            return $cashOnDelivery;
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the manufacturer name.
+     *
+     * @param $variation
+     * @return string
+     */
+    private function getManufacturer($variation)
+    {
+        $manufacturer = null;
+        if(isset($this->manufacturerCache) && array_key_exists($variation['data']['item']['id'], $this->manufacturerCache))
+        {
+            $manufacturer = $this->manufacturerCache[$variation['data']['item']['id']];
+        }
+
+        if(!is_null($manufacturer))
+        {
+            return $manufacturer;
+        }
+
+        return '';
     }
 }
