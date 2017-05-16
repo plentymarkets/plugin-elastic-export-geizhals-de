@@ -2,6 +2,7 @@
 
 namespace ElasticExportGeizhalsDE\ResultField;
 
+use Plenty\Modules\Cloud\ElasticSearch\Lib\ElasticSearch;
 use Plenty\Modules\DataExchange\Contracts\ResultFields;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Item\Search\Mutators\DefaultCategoryMutator;
@@ -21,6 +22,7 @@ class GeizhalsDE extends ResultFields
 
     /**
      * GeizhalsDE constructor.
+     *
      * @param ArrayHelper $arrayHelper
      */
     public function __construct(ArrayHelper $arrayHelper)
@@ -30,6 +32,7 @@ class GeizhalsDE extends ResultFields
 
     /**
      * Creates the fields set to be retrieved from ElasticSearch.
+     *
      * @param  array $formatSettings = []
      * @return array
      */
@@ -37,7 +40,10 @@ class GeizhalsDE extends ResultFields
     {
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
 
-        $itemDescriptionFields = ['texts.urlPath'];
+        $this->setOrderByList(['item.id', ElasticSearch::SORTING_ORDER_ASC]);
+
+        $itemDescriptionFields = ['texts.urlPath', 'texts.lang'];
+
         $itemDescriptionFields[] = ($settings->get('nameId')) ? 'texts.name' . $settings->get('nameId') : 'texts.name1';
 
         if($settings->get('descriptionType') == 'itemShortDescription'
@@ -63,7 +69,6 @@ class GeizhalsDE extends ResultFields
         }
 
         //Mutator
-
         /**
          * @var KeyMutator
          */
@@ -137,37 +142,44 @@ class GeizhalsDE extends ResultFields
     }
 
     /**
+     * Returns the list of keys.
+     *
      * @return array
      */
     private function getKeyList()
     {
         return [
-            // Item
+            //item
             'item.id',
             'item.manufacturer.id',
 
-            // Variation
+            //variation
             'variation.availability.id',
             'variation.model',
             'variation.stockLimitation',
 
-            // Unit
+            //unit
             'unit.content',
             'unit.id',
         ];
     }
 
+    /**
+     * Returns the list of nested keys.
+     *
+     * @return array
+     */
     private function getNestedKeyList()
     {
         return [
             'keys' => [
-                // Attributes
+                //attributes
                 'attributes',
 
-                // Barcodes
+                //barcodes
                 'barcodes',
 
-                // Default categories
+                //defaultCategories
                 'defaultCategories',
 
                 //texts
@@ -175,27 +187,24 @@ class GeizhalsDE extends ResultFields
             ],
 
             'nestedKeys' => [
-                // Attributes
                 'attributes' => [
                     'attributeValueSetId',
                     'attributeId',
                     'valueId'
                 ],
 
-                // Barcodes
                 'barcodes' => [
                     'code',
                     'type'
                 ],
 
-                // Default categories
                 'defaultCategories' => [
                     'id'
                 ],
 
-                // texts
                 'texts' => [
                     'urlPath',
+                    'lang',
                     'name1',
                     'name2',
                     'name3',

@@ -13,6 +13,7 @@ class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
 {
     /**
      * Abstract function for registering the service provider.
+     *
      * @return void
      */
     public function register()
@@ -22,6 +23,7 @@ class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
 
     /**
      * Adds the export format to the export container.
+     *
      * @param ExportPresetContainer $container
      */
     public function boot(ExportPresetContainer $container)
