@@ -5,6 +5,7 @@ namespace ElasticExportGeizhalsDE\ResultField;
 use Plenty\Modules\Cloud\ElasticSearch\Lib\ElasticSearch;
 use Plenty\Modules\DataExchange\Contracts\ResultFields;
 use Plenty\Modules\Helper\Services\ArrayHelper;
+use Plenty\Modules\Item\Search\Mutators\BarcodeMutator;
 use Plenty\Modules\Item\Search\Mutators\DefaultCategoryMutator;
 use Plenty\Modules\Cloud\ElasticSearch\Lib\Source\Mutator\BuiltIn\LanguageMutator;
 use Plenty\Modules\Item\Search\Mutators\KeyMutator;
@@ -15,6 +16,8 @@ use Plenty\Modules\Item\Search\Mutators\KeyMutator;
  */
 class GeizhalsDE extends ResultFields
 {
+    const ALL_MARKET_REFERENCE = -1;
+
     /**
 	 * @var ArrayHelper
 	 */
@@ -39,6 +42,8 @@ class GeizhalsDE extends ResultFields
     public function generateResultFields(array $formatSettings = []):array
     {
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
+
+        $reference = $settings->get('referrerId') ? $settings->get('referrerId') : self::ALL_MARKET_REFERENCE;
 
         $this->setOrderByList(['item.id', ElasticSearch::SORTING_ORDER_ASC]);
 
@@ -95,6 +100,15 @@ class GeizhalsDE extends ResultFields
             $defaultCategoryMutator->setPlentyId($settings->get('plentyId'));
         }
 
+        /**
+         * @var BarcodeMutator $barcodeMutator
+         */
+        $barcodeMutator = pluginApp(BarcodeMutator::class);
+        if($barcodeMutator instanceof BarcodeMutator)
+        {
+            $barcodeMutator->addMarket($reference);
+        }
+
         //Fields
         $fields = [
             [
@@ -122,8 +136,7 @@ class GeizhalsDE extends ResultFields
                 //attributes
                 'attributes.attributeValueSetId',
                 'attributes.attributeId',
-                'attributes.valueId',
-
+                'attributes.valueId'
             ],
 
             [
@@ -160,7 +173,7 @@ class GeizhalsDE extends ResultFields
 
             //unit
             'unit.content',
-            'unit.id',
+            'unit.id'
         ];
     }
 
@@ -183,7 +196,7 @@ class GeizhalsDE extends ResultFields
                 'defaultCategories',
 
                 //texts
-                'texts',
+                'texts'
             ],
 
             'nestedKeys' => [
@@ -210,7 +223,7 @@ class GeizhalsDE extends ResultFields
                     'name3',
                     'shortDescription',
                     'description',
-                    'technicalData',
+                    'technicalData'
                 ],
             ]
         ];

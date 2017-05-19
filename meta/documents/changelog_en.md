@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.0.6 (2017-05-19)
+
+### Fixed
+- An issue was fixed which caused elastic search to ignore the set referrers for the barcodes.
+
 ## v1.0.5 (2017-05-16)
 
 ### Fixed

@@ -2,7 +2,7 @@
   "name": "ElasticExportGeizhalsDE",
   "namespace": "ElasticExportGeizhalsDE",
   "type": "export",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007",
   "pluginIcon": "icon_plugin_md.png",
   "price": 0.00,
@@ -22,6 +22,6 @@
   "authorIcon": "icon_author_xs.png",
   "serviceProvider": "ElasticExportGeizhalsDE\\ElasticExportGeizhalsDEServiceProvider",
   "dependencies": {
-    "ElasticExport": ">=1.0.15"
+    "ElasticExport": ">=1.0.18"
   }
 }
