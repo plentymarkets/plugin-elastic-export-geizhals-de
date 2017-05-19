@@ -141,7 +141,8 @@ class GeizhalsDE extends ResultFields
 
             [
                 $languageMutator,
-                $defaultCategoryMutator
+                $defaultCategoryMutator,
+                $barcodeMutator
             ],
         ];
 
