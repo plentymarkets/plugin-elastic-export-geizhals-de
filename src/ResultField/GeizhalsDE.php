@@ -136,13 +136,13 @@ class GeizhalsDE extends ResultFields
                 //attributes
                 'attributes.attributeValueSetId',
                 'attributes.attributeId',
-                'attributes.valueId'
+                'attributes.valueId',
             ],
 
             [
                 $languageMutator,
                 $defaultCategoryMutator,
-                $barcodeMutator
+                $barcodeMutator,
             ],
         ];
 
@@ -174,7 +174,7 @@ class GeizhalsDE extends ResultFields
 
             //unit
             'unit.content',
-            'unit.id'
+            'unit.id',
         ];
     }
 
@@ -197,23 +197,23 @@ class GeizhalsDE extends ResultFields
                 'defaultCategories',
 
                 //texts
-                'texts'
+                'texts',
             ],
 
             'nestedKeys' => [
                 'attributes' => [
                     'attributeValueSetId',
                     'attributeId',
-                    'valueId'
+                    'valueId',
                 ],
 
                 'barcodes' => [
                     'code',
-                    'type'
+                    'type',
                 ],
 
                 'defaultCategories' => [
-                    'id'
+                    'id',
                 ],
 
                 'texts' => [
@@ -224,9 +224,9 @@ class GeizhalsDE extends ResultFields
                     'name3',
                     'shortDescription',
                     'description',
-                    'technicalData'
+                    'technicalData',
                 ],
-            ]
+            ],
         ];
     }
 }
