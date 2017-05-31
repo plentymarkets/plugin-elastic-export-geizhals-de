@@ -3,7 +3,7 @@
 ## v1.0.7 (2017-05-31)
 
 ### Fixed
-- An issue was fixed which caused the export to use the wrong webshopID to get the price.
+- An issue was fixed which caused the export to use the wrong webstore client to get the price.
 
 ## v1.0.6 (2017-05-29)
 
