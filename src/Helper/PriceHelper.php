@@ -52,6 +52,7 @@ class PriceHelper
         {
             $this->salesPriceSearchRequest->variationId = $variation['id'];
             $this->salesPriceSearchRequest->referrerId = $settings->get('referrerId');
+            $this->salesPriceSearchRequest->plentyId = $settings->get('plentyId');
             $this->salesPriceSearchRequest->type = 'default';
         }
 
