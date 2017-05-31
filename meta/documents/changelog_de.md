@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.7 (2017-05-31)
+
+### Behoben
+- Es wurde ein Fehler behoben, der dazu geführt hat, dass für das Auslesen des Preises der falsche Mandant benutzt wurde.
+
 ## v1.0.6 (2017-05-29)
 
 ### Behoben
