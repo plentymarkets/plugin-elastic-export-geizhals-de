@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.0.8 (2017-07-18)
+
+### Changed
+- The plugin Elastic Export is now required to use the plugin format.
+
 ## v1.0.7 (2017-05-31)
 
 ### Fixed

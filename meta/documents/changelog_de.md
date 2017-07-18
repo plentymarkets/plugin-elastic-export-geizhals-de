@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.8 (2017-07-18)
+
+### Geändert
+- Das Plugin Elastic Export ist nun Voraussetzung zur Nutzung des Plugin-Formats.
+
 ## v1.0.7 (2017-05-31)
 
 ### Behoben
