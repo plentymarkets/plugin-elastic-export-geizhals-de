@@ -104,6 +104,7 @@ class GeizhalsDE extends ResultFields
          * @var BarcodeMutator $barcodeMutator
          */
         $barcodeMutator = pluginApp(BarcodeMutator::class);
+
         if($barcodeMutator instanceof BarcodeMutator)
         {
             $barcodeMutator->addMarket($reference);
@@ -143,6 +144,7 @@ class GeizhalsDE extends ResultFields
                 $languageMutator,
                 $defaultCategoryMutator,
                 $barcodeMutator,
+                $keyMutator,
             ],
         ];
 

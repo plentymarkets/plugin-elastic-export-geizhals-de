@@ -12,7 +12,7 @@ use Plenty\Plugin\ServiceProvider;
 class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
 {
     /**
-     * Abstract function for registering the service provider.
+     * Function for registering the service provider.
      *
      * @return void
      */
