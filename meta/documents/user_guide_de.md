@@ -198,7 +198,7 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
             Versand Vorkasse
         </td>
         <td>
-            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Versandkosten</b> mit dem <b>Versand Vorkasse</b> enthalten.
+            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Versandkosten</b> mit <b>Versand Vorkasse</b>.
         </td>
     </tr>
     <tr>
@@ -206,7 +206,7 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
             Versand Nachnahme
         </td>
         <td>
-            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Versandkosten</b> mit dem <b>Versand Nachnahme</b> enthalten.
+            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Versandkosten</b> mit <b>Versand Nachnahme</b>.
         </td>
     </tr>
     <tr>
