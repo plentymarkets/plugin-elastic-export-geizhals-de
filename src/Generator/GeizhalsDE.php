@@ -3,8 +3,8 @@
 namespace ElasticExportGeizhalsDE\Generator;
 
 use ElasticExport\Helper\ElasticExportCoreHelper;
+use ElasticExport\Helper\ElasticExportPriceHelper;
 use ElasticExport\Helper\ElasticExportStockHelper;
-use ElasticExportGeizhalsDE\Helper\PriceHelper;
 use Plenty\Modules\DataExchange\Contracts\CSVPluginGenerator;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
@@ -28,19 +28,19 @@ class GeizhalsDE extends CSVPluginGenerator
     private $elasticExportCoreHelper;
 
     /**
-     * @var ElasticExportStockHelper $elasticExportStockHelper
+     * @var ElasticExportStockHelper
      */
     private $elasticExportStockHelper;
+
+    /**
+     * @var ElasticExportPriceHelper
+     */
+    private $elasticExportPriceHelper;
 
     /**
      * @var ArrayHelper
      */
     private $arrayHelper;
-
-    /**
-     * @var PriceHelper
-     */
-    private $priceHelper;
 
 	/**
 	 * @var array
@@ -53,23 +53,13 @@ class GeizhalsDE extends CSVPluginGenerator
 	private $cashOnDeliveryCache;
 
 	/**
-	 * @var array
-	 */
-	private $manufacturerCache;
-
-	/**
 	 * GeizhalsDE constructor.
      *
 	 * @param ArrayHelper $arrayHelper
-	 * @param PriceHelper $priceHelper
 	 */
-    public function __construct(
-        ArrayHelper $arrayHelper,
-        PriceHelper $priceHelper
-	)
+    public function __construct(ArrayHelper $arrayHelper)
     {
         $this->arrayHelper = $arrayHelper;
-        $this->priceHelper = $priceHelper;
     }
 
     /**
@@ -82,15 +72,16 @@ class GeizhalsDE extends CSVPluginGenerator
     protected function generatePluginContent($elasticSearch, array $formatSettings = [], array $filter = [])
     {
     	$this->elasticExportStockHelper = pluginApp(ElasticExportStockHelper::class);
+
         $this->elasticExportCoreHelper = pluginApp(ElasticExportCoreHelper::class);
+
+        $this->elasticExportPriceHelper = pluginApp(ElasticExportPriceHelper::class);
 
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
 
         $this->setDelimiter(self::DELIMITER);
 
         $this->addCSVContent($this->head());
-
-        $startTime = microtime(true);
 
         if($elasticSearch instanceof VariationElasticSearchScrollRepositoryContract)
         {
@@ -100,25 +91,15 @@ class GeizhalsDE extends CSVPluginGenerator
 
             do
             {
-                $this->getLogger(__METHOD__)->debug('ElasticExportGeizhalsDE::logs.writtenLines', [
-                    'Lines written' => $limit,
-                ]);
-
                 if($limitReached === true)
                 {
                     break;
                 }
 
-                $esStartTime = microtime(true);
-
                 // Get the data from Elastic Search
                 $resultList = $elasticSearch->execute();
 
-                $this->getLogger(__METHOD__)->debug('ElasticExportGeizhalsDE::logs.esDuration', [
-                    'Elastic Search duration' => microtime(true) - $esStartTime,
-                ]);
-
-                if(count($resultList['error']) > 0)
+                if(!is_null($resultList['error']) && count($resultList['error']) > 0)
                 {
                     $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::logs.occurredElasticSearchErrors', [
                         'Error message' => $resultList['error'],
@@ -127,11 +108,9 @@ class GeizhalsDE extends CSVPluginGenerator
                     break;
                 }
 
-                $buildRowStartTime = microtime(true);
-
                 if(is_array($resultList['documents']) && count($resultList['documents']) > 0)
                 {
-                    $previousId = null;
+                    $previousItemId = null;
 
                     foreach($resultList['documents'] as $variation)
                     {
@@ -145,20 +124,16 @@ class GeizhalsDE extends CSVPluginGenerator
                         // If filtered by stock is set and stock is negative, then skip the variation
                         if ($this->elasticExportStockHelper->isFilteredByStock($variation, $filter) === true)
                         {
-                            $this->getLogger(__METHOD__)->info('ElasticExportGeizhalsDE::logs.variationNotPartOfExportStock', [
-                                'VariationId' => $variation['id']
-                            ]);
-
                             continue;
                         }
 
                         try
                         {
                             // Set the caches if we have the first variation or when we have the first variation of an item
-                            if($previousId === null || $previousId != $variation['data']['item']['id'])
+                            if($previousItemId === null || $previousItemId != $variation['data']['item']['id'])
                             {
-                                $previousId = $variation['data']['item']['id'];
-                                unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache, $this->manufacturerCache);
+                                $previousItemId = $variation['data']['item']['id'];
+                                unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache);
 
                                 // Build the caches arrays
                                 $this->buildCaches($variation, $settings);
@@ -179,18 +154,10 @@ class GeizhalsDE extends CSVPluginGenerator
                         // New line was added
                         $limit++;
                     }
-
-                    $this->getLogger(__METHOD__)->debug('ElasticExportGeizhalsDE::logs.buildRowDuration', [
-                        'Build rows duration' => microtime(true) - $buildRowStartTime,
-                    ]);
                 }
 
             } while ($elasticSearch->hasNext());
         }
-
-        $this->getLogger(__METHOD__)->debug('ElasticExportGeizhalsDE::logs.fileGenerationDuration', [
-            'Whole file generation duration' => microtime(true) - $startTime,
-        ]);
     }
 
     /**
@@ -201,18 +168,19 @@ class GeizhalsDE extends CSVPluginGenerator
     private function head():array
     {
         return array(
-            'Hersteller',
+            'Herstellername',
             'Produktcode',
-            'Bezeichnung',
+            'Produktbezeichnung',
             'Preis',
             'Deeplink',
-            'Vorkasse',
-            'Nachnahme',
+            'Versand Vorkasse',
+            'Versand Nachnahme',
             'Verfügbarkeit',
-            'Herstellercode',
+            'Herstellernummer',
             'EAN',
             'Kategorie',
             'Grundpreis',
+            'Beschreibung',
         );
     }
 
@@ -224,47 +192,40 @@ class GeizhalsDE extends CSVPluginGenerator
      */
     private function buildRow($variation, KeyValue $settings)
     {
-        // get the price
-        $price = $this->priceHelper->getPrice($variation, $settings);
+        // Get the price list
+        $priceList = $this->elasticExportPriceHelper->getPriceList($variation, $settings, 2, ',');
 
-        // only variations with the Retail Price greater than zero will be handled
-        if(!is_null($price['variationRetailPrice.price']) && $price['variationRetailPrice.price'] > 0)
+        // Only variations with the Retail Price greater than zero will be handled
+        if(!is_null($priceList['price']) && $priceList['price'] > 0)
         {
             $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
 
-            $paymentInAdvance = $this->getPaymentInAdvance($variation, $price['variationRetailPrice.price'], $settings);
+            $paymentInAdvance = $this->getPaymentInAdvance($variation, $priceList['price'], $settings);
 
-            $cashOnDelivery = $this->getCashOnDelivery($variation, $price['variationRetailPrice.price'], $settings);
-
-            $manufacturer = $this->getManufacturer($variation);
+            $cashOnDelivery = $this->getCashOnDelivery($variation, $priceList['price'], $settings);
 
             $data = [
-                'Hersteller' 		=> $manufacturer,
-                'Produktcode' 		=> $variation['id'],
-                'Bezeichnung' 		=> $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
-                'Preis' 			=> number_format((float)$price['variationRetailPrice.price'], 2, '.', ''),
-                'Deeplink' 			=> $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
-                'Vorkasse' 			=> $paymentInAdvance,
-                'Nachnahme' 		=> $cashOnDelivery,
-                'Verfügbarkeit' 	=> $this->elasticExportCoreHelper->getAvailability($variation, $settings),
-                'Herstellercode' 	=> $variation['data']['variation']['model'],
-                'EAN' 				=> $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
-                'Kategorie' 		=> $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
-                'Grundpreis' 		=> $this->elasticExportCoreHelper->getBasePrice($variation, $price, $settings->get('lang')),
+                'Herstellername'        => $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
+                'Produktcode'           => $variation['id'],
+                'Produktbezeichnung'    => $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
+                'Preis'                 => $priceList['price'],
+                'Deeplink'              => $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
+                'Versand Vorkasse'      => $paymentInAdvance,
+                'Versand Nachnahme'     => $cashOnDelivery,
+                'Verfügbarkeit'         => $this->elasticExportCoreHelper->getAvailability($variation, $settings),
+                'Herstellernummer'      => $variation['data']['variation']['model'],
+                'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
+                'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
+                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
+                'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
             ];
 
             $this->addCSVContent(array_values($data));
         }
-        else
-        {
-            $this->getLogger(__METHOD__)->info('ElasticExportGeizhalsDE::logs.variationNotPartOfExportPrice', [
-                'VariationId' => $variation['id']
-            ]);
-        }
     }
 
     /**
-     * Get payement extra charge.
+     * Get payment extra charge.
      *
      * @param  array    $price
      * @param  KeyValue $settings
@@ -283,10 +244,8 @@ class GeizhalsDE extends CSVPluginGenerator
                 {
                     return ((float) $paymentMethods[$paymentMethodId]->feeForeignPercentageWebstore / 100) * $price;
                 }
-                else
-                {
-                    return (float) $paymentMethods[$paymentMethodId]->feeForeignFlatRateWebstore;
-                }
+
+                return (float) $paymentMethods[$paymentMethodId]->feeForeignFlatRateWebstore;
             }
         }
 
@@ -303,11 +262,11 @@ class GeizhalsDE extends CSVPluginGenerator
     {
         if(!is_null($variation) && !is_null($variation['data']['item']['id']))
         {
-            $this->paymentInAdvanceCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
+            $shippingCost = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
+            $this->paymentInAdvanceCache[$variation['data']['item']['id']] = (float)$shippingCost;
 
-            $this->cashOnDeliveryCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
-
-            $this->manufacturerCache[$variation['data']['item']['id']] = $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']);
+            $cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
+            $this->cashOnDeliveryCache[$variation['data']['item']['id']] = (float)$cashOnDelivery;
         }
     }
 
@@ -315,6 +274,8 @@ class GeizhalsDE extends CSVPluginGenerator
      * Get the payment in advance.
      *
      * @param $variation
+     * @param $price
+     * @param $settings
      * @return mixed|null|string
      */
     private function getPaymentInAdvance($variation, $price, $settings)
@@ -338,6 +299,8 @@ class GeizhalsDE extends CSVPluginGenerator
      * Get the cash on delivery.
      *
      * @param $variation
+     * @param $price
+     * @param $settings
      * @return mixed|null|string
      */
     private function getCashOnDelivery($variation, $price, $settings)
@@ -352,28 +315,6 @@ class GeizhalsDE extends CSVPluginGenerator
         {
             $cashOnDelivery = number_format((float)$cashOnDelivery + $this->getPaymentShippingExtraCharge($price, $settings, 1), 2, '.', '');
             return $cashOnDelivery;
-        }
-
-        return '';
-    }
-
-    /**
-     * Get the manufacturer name.
-     *
-     * @param $variation
-     * @return string
-     */
-    private function getManufacturer($variation)
-    {
-        $manufacturer = null;
-        if(isset($this->manufacturerCache) && array_key_exists($variation['data']['item']['id'], $this->manufacturerCache))
-        {
-            $manufacturer = $this->manufacturerCache[$variation['data']['item']['id']];
-        }
-
-        if(!is_null($manufacturer))
-        {
-            return $manufacturer;
         }
 
         return '';
