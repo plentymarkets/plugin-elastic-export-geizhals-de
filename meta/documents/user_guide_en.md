@@ -197,7 +197,7 @@ The following table lists details for settings, format settings and recommended 
 			Versand Vorkasse
 		</td>
 		<td>
-			<b>Content:</b> According to the format setting <b>Shipping costs</b> with the <b>Payment in Advance costs</b> included.
+			<b>Content:</b> According to the format setting <b>Shipping costs</b>, including <b>Payment in Advance costs</b>.
 		</td>        
 	</tr>
 	<tr>
@@ -205,7 +205,7 @@ The following table lists details for settings, format settings and recommended 
 			Versand Nachnahme
 		</td>
 		<td>
-			<b>Content:</b> According to the format setting <b>Shipping costs</b> with the <b>Cash on Delivery costs</b> included.
+			<b>Content:</b> According to the format setting <b>Shipping costs</b>, including <b>Cash on Delivery costs</b>.
 		</td>        
 	</tr>
 	<tr>
