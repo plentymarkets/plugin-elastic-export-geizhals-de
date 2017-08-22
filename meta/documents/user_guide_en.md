@@ -130,6 +130,23 @@ The following table lists details for settings, format settings and recommended 
 			Explanation
 		</th>
 	</tr>
+	<tr>
+        <td>
+            Herstellername
+        </td>
+        <td>
+            <b>Required</b><br>
+            <b>Content:</b> The <b>name of the manufacturer</b> of the item. The <b>external name</b> within <b>Settings » Items » Manufacturer</b> will be preferred if existing.
+        </td>        
+    </tr>
+    <tr>
+        <td>
+            Produktcode
+        </td>
+        <td>
+            <b>Content:</b> The <b>Variation-ID</b> of the variation.
+        </td>        
+    </tr>
     <tr>
         <td>
             Produktbezeichnung
@@ -139,15 +156,6 @@ The following table lists details for settings, format settings and recommended 
             <b>Content:</b> According to the format setting <b>item name</b>.
         </td>        
     </tr>
-    <tr>
-		<td>
-			Herstellername
-		</td>
-		<td>
-		    <b>Required</b><br>
-		    <b>Content:</b> The <b>name of the manufacturer</b> of the item. The <b>external name</b> within <b>Settings » Items » Manufacturer</b> will be preferred if existing.
-		</td>        
-	</tr>
 	<tr>
 		<td>
 			Preis
@@ -168,32 +176,6 @@ The following table lists details for settings, format settings and recommended 
 	</tr>
 	<tr>
 		<td>
-			Herstellernummer
-		</td>
-		<td>
-			<b>Required</b><br>
-            <b>Content:</b> The <b>Model</b> within <b>Items » Edit item » Open item » Open variation » Settings » Basic settings</b>.
-		</td>        
-	</tr>
-	<tr>
-		<td>
-			Beschreibung
-		</td>
-		<td>
-		    <b>Content:</b> According to the format setting <b>Description</b>.
-		</td>        
-	</tr>
-    <tr>
-		<td>
-			Verfügbarkeit
-		</td>
-		<td>
-		    <b>Required</b><br>
-		    <b>Content:</b>The <b>name of the item availability</b> under <b>Settings » Item » Item availability</b> or the translation according to the format setting <b>Item availability</b>.
-		</td>        
-	</tr>
-	<tr>
-		<td>
 			Versand Vorkasse
 		</td>
 		<td>
@@ -208,6 +190,24 @@ The following table lists details for settings, format settings and recommended 
 			<b>Content:</b> According to the format setting <b>Shipping costs</b>, including <b>Cash on Delivery costs</b>.
 		</td>        
 	</tr>
+    <tr>
+        <td>
+            Verfügbarkeit
+        </td>
+        <td>
+            <b>Required</b><br>
+            <b>Content:</b>The <b>name of the item availability</b> under <b>Settings » Item » Item availability</b> or the translation according to the format setting <b>Item availability</b>.
+        </td>        
+    </tr>
+    <tr>
+        <td>
+            Herstellernummer
+        </td>
+        <td>
+            <b>Required</b><br>
+            <b>Content:</b> The <b>Model</b> within <b>Items » Edit item » Open item » Open variation » Settings » Basic settings</b>.
+        </td>        
+    </tr>
 	<tr>
 		<td>
 			EAN
@@ -215,14 +215,6 @@ The following table lists details for settings, format settings and recommended 
 		<td>
 		    <b>Required</b><br>
 		    <b>Content:</b> According to the format setting <b>Barcode</b>.
-		</td>        
-	</tr>
-	<tr>
-		<td>
-			Produktcode
-		</td>
-		<td>
-			<b>Content:</b> The <b>Variation-ID</b> of the variation.
 		</td>        
 	</tr>
 	<tr>
@@ -241,6 +233,14 @@ The following table lists details for settings, format settings and recommended 
 			<b>Content:</b> The <b>base price information</b>. The format is "price / unit". (Example: 10.00 EUR / kilogram)
 		</td>        
 	</tr>
+	<tr>
+        <td>
+            Beschreibung
+        </td>
+        <td>
+            <b>Content:</b> According to the format setting <b>Description</b>.
+        </td>        
+    </tr>
 </table>
 
 ## License

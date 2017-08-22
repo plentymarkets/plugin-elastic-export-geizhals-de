@@ -133,20 +133,28 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
     </tr>
     <tr>
         <td>
-            Produktbezeichnung
-        </td>
-        <td>
-            <b>Pflichtfeld</b><br>
-            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Artikelname</b>.
-        </td>
-    </tr>
-    <tr>
-        <td>
             Herstellername
         </td>
         <td>
             <b>Pflichtfeld</b><br>
             <b>Inhalt:</b> Der <b>Herstellers</b> des Artikels. Der <b>Externe Name</b> unter <b>Einstellungen » Artikel » Hersteller</b> wird bevorzugt, wenn vorhanden.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Produktcode
+        </td>
+        <td>
+            <b>Inhalt:</b> Die <b>Varianten-ID</b> der Variante.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Produktbezeichnung
+        </td>
+        <td>
+            <b>Pflichtfeld</b><br>
+            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Artikelname</b>.
         </td>
     </tr>
     <tr>
@@ -169,32 +177,6 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
     </tr>
     <tr>
         <td>
-            Herstellernummer
-        </td>
-        <td>
-            <b>Pflichtfeld</b><br>
-            <b>Inhalt:</b> Das <b>Modell</b> unter <b>Artikel » Artikel bearbeiten » Artikel öffnen » Variante öffnen » Einstellungen » Grundeinstellungen</b>.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Beschreibung
-        </td>
-        <td>
-            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Beschreibung</b>.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Verfügbarkeit
-        </td>
-        <td>
-            <b>Pflichtfeld</b><br>
-            <b>Inhalt:</b> Der <b>Name der Artikelverfügbarkeit</b> unter <b>Einstellungen » Artikel » Artikelverfügbarkeit</b> oder die Übersetzung gemäß der Formateinstellung <b>Artikelverfügbarkeit überschreiben</b>.
-        </td>
-    </tr>
-    <tr>
-        <td>
             Versand Vorkasse
         </td>
         <td>
@@ -211,19 +193,29 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
     </tr>
     <tr>
         <td>
+            Verfügbarkeit
+        </td>
+        <td>
+            <b>Pflichtfeld</b><br>
+            <b>Inhalt:</b> Der <b>Name der Artikelverfügbarkeit</b> unter <b>Einstellungen » Artikel » Artikelverfügbarkeit</b> oder die Übersetzung gemäß der Formateinstellung <b>Artikelverfügbarkeit überschreiben</b>.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Herstellernummer
+        </td>
+        <td>
+            <b>Pflichtfeld</b><br>
+            <b>Inhalt:</b> Das <b>Modell</b> unter <b>Artikel » Artikel bearbeiten » Artikel öffnen » Variante öffnen » Einstellungen » Grundeinstellungen</b>.
+        </td>
+    </tr>
+    <tr>
+        <td>
             EAN
         </td>
         <td>
             <b>Pflichtfeld</b><br>
             <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Barcode</b>.
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Produktcode
-        </td>
-        <td>
-            <b>Inhalt:</b> Die <b>Varianten-ID</b> der Variante.
         </td>
     </tr>
     <tr>
@@ -240,6 +232,14 @@ In der folgenden Tabelle finden Sie spezifische Hinweise zu den Einstellungen, F
         </td>
         <td>
             <b>Inhalt:</b> Die <b>Grundpreisinformation</b> im Format "Preis / Einheit". (Beispiel: 10.00 EUR / Kilogramm)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Beschreibung
+        </td>
+        <td>
+            <b>Inhalt:</b> Entsprechend der Formateinstellung <b>Beschreibung</b>.
         </td>
     </tr>
 </table>

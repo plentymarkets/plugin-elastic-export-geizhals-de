@@ -57,9 +57,7 @@ class GeizhalsDE extends CSVPluginGenerator
      *
 	 * @param ArrayHelper $arrayHelper
 	 */
-    public function __construct(
-        ArrayHelper $arrayHelper
-	)
+    public function __construct(ArrayHelper $arrayHelper)
     {
         $this->arrayHelper = $arrayHelper;
     }
@@ -170,19 +168,19 @@ class GeizhalsDE extends CSVPluginGenerator
     private function head():array
     {
         return array(
-            'Produktbezeichnung',
             'Herstellername',
+            'Produktcode',
+            'Produktbezeichnung',
             'Preis',
             'Deeplink',
-            'Herstellernummer',
-            'Beschreibung',
-            'Verfügbarkeit',
             'Versand Vorkasse',
             'Versand Nachnahme',
+            'Verfügbarkeit',
+            'Herstellernummer',
             'EAN',
-            'Produktcode',
             'Kategorie',
             'Grundpreis',
+            'Beschreibung',
         );
     }
 
@@ -207,19 +205,19 @@ class GeizhalsDE extends CSVPluginGenerator
             $cashOnDelivery = $this->getCashOnDelivery($variation, $priceList['price'], $settings);
 
             $data = [
-                'Produktbezeichnung'    => $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
                 'Herstellername'        => $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
+                'Produktcode'           => $variation['id'],
+                'Produktbezeichnung'    => $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
                 'Preis'                 => $priceList['price'],
                 'Deeplink'              => $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
-                'Herstellernummer'      => $variation['data']['variation']['model'],
-                'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
-                'Verfügbarkeit'         => $this->elasticExportCoreHelper->getAvailability($variation, $settings),
                 'Versand Vorkasse'      => $paymentInAdvance,
                 'Versand Nachnahme'     => $cashOnDelivery,
+                'Verfügbarkeit'         => $this->elasticExportCoreHelper->getAvailability($variation, $settings),
+                'Herstellernummer'      => $variation['data']['variation']['model'],
                 'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
-                'Produktcode'           => $variation['id'],
                 'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
                 'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
+                'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
             ];
 
             $this->addCSVContent(array_values($data));

@@ -1,6 +1,6 @@
 # Release Notes for Elastic Export Geizhals.de
 
-## v1.0.9 (2017-08-21)
+## v1.0.9 (2017-08-22)
 
 ### Changed 
 - The format plugin is now based on Elastic Search only.
