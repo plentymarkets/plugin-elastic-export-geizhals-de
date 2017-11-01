@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## 1.0.10 (2017-11-01)
+
+### Fixed
+- An issue was fixed which caused the connection to elasticsearch to break.
+
 ## v1.0.9 (2017-08-22)
 
 ### Changed 

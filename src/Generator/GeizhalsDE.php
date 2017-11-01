@@ -85,6 +85,9 @@ class GeizhalsDE extends CSVPluginGenerator
 
         if($elasticSearch instanceof VariationElasticSearchScrollRepositoryContract)
         {
+        	
+        	$elasticSearch->setNumberOfDocumentsPerShard(250);
+        	
             // Initiate the counter for the variations limit
             $limitReached = false;
             $limit = 0;

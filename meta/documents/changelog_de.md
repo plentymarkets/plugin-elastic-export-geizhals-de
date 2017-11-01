@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## 1.0.10 (2017-11-01)
+
+### Behoben
+- Ein Fehler wurde behoben, welcher dazu führte, dass der Kontakt zu Elasticsearch unterbrochen wurde.
+
 ## v1.0.9 (2017-08-22)
 
 ### Geändert
