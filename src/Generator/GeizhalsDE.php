@@ -91,6 +91,9 @@ class GeizhalsDE extends CSVPluginGenerator
             // Initiate the counter for the variations limit
             $limitReached = false;
             $limit = 0;
+			$shardIterator = 0;
+			$averageCacheGenerationTime = 0;
+			$cacheIterator = 0;
 
             do
             {
@@ -102,9 +105,17 @@ class GeizhalsDE extends CSVPluginGenerator
                 // Get the data from Elastic Search
                 $resultList = $elasticSearch->execute();
 
+				$shardIterator++;
+
+				//log the amount of the elasticsearch result once
+				if($shardIterator == 1)
+				{
+					$this->getLogger(__METHOD__)->addReference('total', (int)$resultList['total'])->info('ElasticExportGeizhalsDE::log.esResultAmount');
+				}	
+
                 if(!is_null($resultList['error']) && count($resultList['error']) > 0)
                 {
-                    $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::logs.occurredElasticSearchErrors', [
+                    $this->getLogger(__METHOD__)->addReference('failedShard', $shardIterator)->error('ElasticExportGeizhalsDE::logs.occurredElasticSearchErrors', [
                         'Error message' => $resultList['error'],
                     ]);
 
@@ -138,8 +149,11 @@ class GeizhalsDE extends CSVPluginGenerator
                                 $previousItemId = $variation['data']['item']['id'];
                                 unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache);
 
-                                // Build the caches arrays
-                                $this->buildCaches($variation, $settings);
+								// Build the caches arrays
+								$cacheIterator++;
+								$cacheGenerationTime = microtime(true);
+								$this->buildCaches($variation, $settings);
+								$averageCacheGenerationTime = $averageCacheGenerationTime + (microtime(true) - $cacheGenerationTime);
                             }
 
                             // Build the new row for printing in the CSV file
@@ -160,6 +174,10 @@ class GeizhalsDE extends CSVPluginGenerator
                 }
 
             } while ($elasticSearch->hasNext());
+            
+            $this->getLogger(__METHOD__)->info('ElasticExportGeizhalsDE::logs.averageCacheDuration', [
+            	'Average cache building time'	=>	$averageCacheGenerationTime/$cacheIterator
+			]);
         }
     }
 
