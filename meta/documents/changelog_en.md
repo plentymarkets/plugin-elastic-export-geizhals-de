@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## 1.0.11 (2017-11-10)
+
+### Added
+- Added an additional log for the average cache generation duration.
+
 ## 1.0.10 (2017-11-01)
 
 ### Fixed
