@@ -3,7 +3,7 @@
 ## 1.0.11 (2017-11-10)
 
 ### Hinzugefügt
-- Es wurde ein Log für die Durchschnittsdauer der Cachegenerierung hinzugefügt.
+- Es wurde ein Log für die Durchschnittsdauer der Cache-Generierung hinzugefügt.
 
 ## 1.0.10 (2017-11-01)
 
