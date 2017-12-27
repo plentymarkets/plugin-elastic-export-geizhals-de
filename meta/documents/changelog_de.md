@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.11 (2017-12-27)
+
+### Geändert
+- The format plugin exports now the Payment Methods depending on the configuration of the Shipping Costs.
+
 ## 1.0.10 (2017-11-01)
 
 ### Behoben

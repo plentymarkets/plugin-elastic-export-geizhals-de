@@ -10,6 +10,7 @@ use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
 use Plenty\Modules\Item\Search\Contracts\VariationElasticSearchScrollRepositoryContract;
 use Plenty\Modules\Order\Payment\Method\Models\PaymentMethod;
+use Plenty\Modules\Order\Shipping\Models\DefaultShipping;
 use Plenty\Plugin\Log\Loggable;
 
 /**
@@ -21,6 +22,11 @@ class GeizhalsDE extends CSVPluginGenerator
     use Loggable;
 
     const DELIMITER = ";";
+
+    const DEFAULT_PAYMENT_METHOD = 'vorkasse';
+
+    const SHIPPING_COST_TYPE_FLAT = 'flat';
+    const SHIPPING_COST_TYPE_CONFIGURATION = 'configuration';
 
     /**
      * @var ElasticExportCoreHelper
@@ -42,15 +48,15 @@ class GeizhalsDE extends CSVPluginGenerator
      */
     private $arrayHelper;
 
-	/**
-	 * @var array
-	 */
-	private $paymentInAdvanceCache;
+    /**
+     * @var array
+     */
+    private $usedPaymentMethods = [];
 
-	/**
-	 * @var array
-	 */
-	private $cashOnDeliveryCache;
+    /**
+     * @var array
+     */
+    private $defaultShippingList = [];
 
 	/**
 	 * GeizhalsDE constructor.
@@ -81,7 +87,7 @@ class GeizhalsDE extends CSVPluginGenerator
 
         $this->setDelimiter(self::DELIMITER);
 
-        $this->addCSVContent($this->head());
+        $this->addCSVContent($this->head($settings));
 
         if($elasticSearch instanceof VariationElasticSearchScrollRepositoryContract)
         {
@@ -132,16 +138,6 @@ class GeizhalsDE extends CSVPluginGenerator
 
                         try
                         {
-                            // Set the caches if we have the first variation or when we have the first variation of an item
-                            if($previousItemId === null || $previousItemId != $variation['data']['item']['id'])
-                            {
-                                $previousItemId = $variation['data']['item']['id'];
-                                unset($this->paymentInAdvanceCache, $this->cashOnDeliveryCache);
-
-                                // Build the caches arrays
-                                $this->buildCaches($variation, $settings);
-                            }
-
                             // Build the new row for printing in the CSV file
                             $this->buildRow($variation, $settings);
                         }
@@ -168,23 +164,116 @@ class GeizhalsDE extends CSVPluginGenerator
      *
      * @return array
      */
-    private function head():array
+    private function head(KeyValue $settings):array
     {
-        return array(
+        $data = [
             'Herstellername',
             'Produktcode',
             'Produktbezeichnung',
             'Preis',
             'Deeplink',
-            'Versand Vorkasse',
-            'Versand Nachnahme',
             'Verfügbarkeit',
             'Herstellernummer',
             'EAN',
             'Kategorie',
             'Grundpreis',
             'Beschreibung',
-        );
+        ];
+
+        /**
+         * If the shipping cost type is configuration, all payment methods will be taken as available payment methods from the chosen
+         * default shipping configuration.
+         */
+        if($settings->get('shippingCostType') == self::SHIPPING_COST_TYPE_CONFIGURATION)
+        {
+            /**
+             * @var PaymentMethod[] $paymentMethods
+             */
+            $paymentMethods = $this->elasticExportCoreHelper->getPaymentMethods($settings);
+            $defaultShipping = $this->elasticExportCoreHelper->getDefaultShipping($settings);
+
+            if($defaultShipping instanceof DefaultShipping)
+            {
+                foreach([$defaultShipping->paymentMethod2, $defaultShipping->paymentMethod3] as $paymentMethodId)
+                {
+                    if(array_key_exists($paymentMethodId, $paymentMethods))
+                    {
+                        $usedPaymentMethod = $this->usedPaymentMethods[$defaultShipping->id][0];
+
+                        /**
+                         * Three cases:
+                         */
+                        if(	(count($this->usedPaymentMethods) == 0) ||
+
+                            ((count($this->usedPaymentMethods) == 1 || count($this->usedPaymentMethods) == 2)
+                                && $usedPaymentMethod instanceof PaymentMethod
+                                && isset($usedPaymentMethod->id)
+                                && $usedPaymentMethod->id != $paymentMethodId)
+                        )
+                        {
+                            $paymentMethod = $paymentMethods[$paymentMethodId];
+
+                            if($paymentMethod instanceof PaymentMethod)
+                            {
+                                if(isset($paymentMethod->name) && strlen($paymentMethod->name))
+                                {
+                                    $data[] = $paymentMethod->name;
+                                    $this->usedPaymentMethods[$defaultShipping->id][] = $paymentMethod;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * If nothing is checked at the elastic export settings regarding the shipping cost type,
+         * all payment methods within both default shipping configurations will be taken as available payment methods.
+         */
+        elseif($settings->get('shippingCostType') == '')
+        {
+            /**
+             * @var PaymentMethod[] $paymentMethods
+             */
+            $paymentMethods = $this->elasticExportCoreHelper->getPaymentMethods($settings);
+            $this->defaultShippingList = $this->elasticExportCoreHelper->getDefaultShippingList();
+
+            foreach($this->defaultShippingList as $defaultShipping)
+            {
+                if($defaultShipping instanceof DefaultShipping)
+                {
+                    foreach([$defaultShipping->paymentMethod2, $defaultShipping->paymentMethod3] as $paymentMethodId)
+                    {
+                        if(!array_key_exists($paymentMethodId, $paymentMethods) ||
+                            !($paymentMethods[$paymentMethodId] instanceof PaymentMethod))
+                        {
+                            continue;
+                        }
+
+                        $paymentMethod = $paymentMethods[$paymentMethodId];
+
+                        if($paymentMethod instanceof PaymentMethod)
+                        {
+                            if((count($this->usedPaymentMethods) == 0) ||
+                                (count($this->usedPaymentMethods) >= 1 && $this->usedPaymentMethods[$defaultShipping->id][0]->id != $paymentMethodId)
+                            )
+                            {
+                                $data[] = $paymentMethod->name;
+                                $this->usedPaymentMethods[$defaultShipping->id][] = $paymentMethod;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(count($this->usedPaymentMethods) <= 0 || $settings->get('shippingCostType') == self::SHIPPING_COST_TYPE_FLAT)
+        {
+            $data[] = self::DEFAULT_PAYMENT_METHOD;
+        }
+
+        return $data;
     }
 
     /**
@@ -195,131 +284,82 @@ class GeizhalsDE extends CSVPluginGenerator
      */
     private function buildRow($variation, KeyValue $settings)
     {
-        // Get the price list
         $priceList = $this->elasticExportPriceHelper->getPriceList($variation, $settings, 2, ',');
 
-        // Only variations with the Retail Price greater than zero will be handled
-        if(!is_null($priceList['price']) && $priceList['price'] > 0)
+        $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
+
+        $data = [
+            'Herstellername'        => $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
+            'Produktcode'           => $variation['id'],
+            'Produktbezeichnung'    => $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
+            'Preis'                 => $priceList['price'],
+            'Deeplink'              => $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
+            'Verfügbarkeit'         => $this->elasticExportCoreHelper->getAvailability($variation, $settings),
+            'Herstellernummer'      => $variation['data']['variation']['model'],
+            'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
+            'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
+            'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
+            'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
+        ];
+
+        /**
+         * Add the payment methods and their costs
+         */
+        if(count($this->usedPaymentMethods) == 1)
         {
-            $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
-
-            $paymentInAdvance = $this->getPaymentInAdvance($variation, $priceList['price'], $settings);
-
-            $cashOnDelivery = $this->getCashOnDelivery($variation, $priceList['price'], $settings);
-
-            $data = [
-                'Herstellername'        => $this->elasticExportCoreHelper->getExternalManufacturerName((int)$variation['data']['item']['manufacturer']['id']),
-                'Produktcode'           => $variation['id'],
-                'Produktbezeichnung'    => $this->elasticExportCoreHelper->getMutatedName($variation, $settings) . (strlen($variationName) ? ' ' . $variationName : ''),
-                'Preis'                 => $priceList['price'],
-                'Deeplink'              => $this->elasticExportCoreHelper->getMutatedUrl($variation, $settings, true, false),
-                'Versand Vorkasse'      => $paymentInAdvance,
-                'Versand Nachnahme'     => $cashOnDelivery,
-                'Verfügbarkeit'         => $this->elasticExportCoreHelper->getAvailability($variation, $settings),
-                'Herstellernummer'      => $variation['data']['variation']['model'],
-                'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
-                'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
-                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
-                'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
-            ];
-
-            $this->addCSVContent(array_values($data));
-        }
-    }
-
-    /**
-     * Get payment extra charge.
-     *
-     * @param  array    $price
-     * @param  KeyValue $settings
-     * @param  int      $paymentMethodId
-     * @return float
-     */
-    private function getPaymentShippingExtraCharge($price, KeyValue $settings, int $paymentMethodId):float
-    {
-        $paymentMethods = $this->elasticExportCoreHelper->getPaymentMethods($settings);
-
-        if(count($paymentMethods) > 0)
-        {
-            if(array_key_exists($paymentMethodId, $paymentMethods) && $paymentMethods[$paymentMethodId] instanceof PaymentMethod)
+            foreach($this->usedPaymentMethods as $paymentMethod)
             {
-                if($paymentMethods[$paymentMethodId]->feeForeignPercentageWebstore)
+                foreach($paymentMethod as $method)
                 {
-                    return ((float) $paymentMethods[$paymentMethodId]->feeForeignPercentageWebstore / 100) * $price;
+                    if($method instanceof PaymentMethod)
+                    {
+                        if(isset($method->name))
+                        {
+                            $cost = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, $method->id);
+                            $data[$method->name] = number_format((float)$cost, 2, '.', '');
+                        }
+                    }
+                    else
+                    {
+                        $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::item.loadInstanceError', 'PaymentMethod');
+                    }
                 }
-
-                return (float) $paymentMethods[$paymentMethodId]->feeForeignFlatRateWebstore;
             }
         }
-
-        return 0.0;
-    }
-
-    /**
-     * Build the cache arrays for the item variation.
-     *
-     * @param $variation
-     * @param $settings
-     */
-    private function buildCaches($variation, $settings)
-    {
-        if(!is_null($variation) && !is_null($variation['data']['item']['id']))
+        elseif(count($this->usedPaymentMethods) > 1)
         {
-            $shippingCost = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 0);
-            $this->paymentInAdvanceCache[$variation['data']['item']['id']] = (float)$shippingCost;
-
-            $cashOnDelivery = $this->elasticExportCoreHelper->getShippingCost($variation['data']['item']['id'], $settings, 1);
-            $this->cashOnDeliveryCache[$variation['data']['item']['id']] = (float)$cashOnDelivery;
+            foreach($this->usedPaymentMethods as $defaultShipping => $paymentMethod)
+            {
+                foreach ($paymentMethod as $method)
+                {
+                    if($method instanceof PaymentMethod)
+                    {
+                        if(isset($method->name) && !isset($data[$method->name]))
+                        {
+                            $cost = $this->elasticExportCoreHelper->calculateShippingCost(
+                                $variation['data']['item']['id'],
+                                $this->defaultShippingList[$defaultShipping]->shippingDestinationId,
+                                $this->defaultShippingList[$defaultShipping]->referrerId,
+                                $method->id);
+                            $data[$method->name] = number_format((float)$cost, 2, '.', '');
+                        }
+                    }
+                    else
+                    {
+                        $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::item.loadInstanceError', 'PaymentMethod');
+                    }
+                }
+            }
         }
-    }
-
-    /**
-     * Get the payment in advance.
-     *
-     * @param $variation
-     * @param $price
-     * @param $settings
-     * @return mixed|null|string
-     */
-    private function getPaymentInAdvance($variation, $price, $settings)
-    {
-        $paymentInAdvance = null;
-        if(isset($this->paymentInAdvanceCache) && array_key_exists($variation['data']['item']['id'], $this->paymentInAdvanceCache))
+        elseif(count($this->usedPaymentMethods) <= 0 && $settings->get('shippingCostType') == self::SHIPPING_COST_TYPE_FLAT)
         {
-            $paymentInAdvance = $this->paymentInAdvanceCache[$variation['data']['item']['id']];
+            $data[self::DEFAULT_PAYMENT_METHOD] = $settings->get('shippingCostFlat');
+        }
+        else
+        {
+            $data[self::DEFAULT_PAYMENT_METHOD] = 0.00;
         }
 
-        if(!is_null($paymentInAdvance))
-        {
-            $paymentInAdvance = number_format((float)$paymentInAdvance + $this->getPaymentShippingExtraCharge($price, $settings, 0), 2, '.', '');
-            return $paymentInAdvance;
-        }
-
-        return '';
-    }
-
-    /**
-     * Get the cash on delivery.
-     *
-     * @param $variation
-     * @param $price
-     * @param $settings
-     * @return mixed|null|string
-     */
-    private function getCashOnDelivery($variation, $price, $settings)
-    {
-        $cashOnDelivery = null;
-        if(isset($this->cashOnDeliveryCache) && array_key_exists($variation['data']['item']['id'], $this->cashOnDeliveryCache))
-        {
-            $cashOnDelivery = $this->cashOnDeliveryCache[$variation['data']['item']['id']];
-        }
-
-        if(!is_null($cashOnDelivery))
-        {
-            $cashOnDelivery = number_format((float)$cashOnDelivery + $this->getPaymentShippingExtraCharge($price, $settings, 1), 2, '.', '');
-            return $cashOnDelivery;
-        }
-
-        return '';
+        $this->addCSVContent(array_values($data));
     }
 }
