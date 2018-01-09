@@ -3,7 +3,7 @@
 ## v1.0.11 (2017-12-27)
 
 ### Geändert
-- Abhängig von den konfigurierten Versandkosten, werden auch Zahlungsmethoden bei Plugin-Formaten exportiert.
+- Abhängig von den konfigurierten Versandkosten, werden auch Zahlungsmethoden beim Plugin-Format exportiert.
 
 ## 1.0.10 (2017-11-01)
 
