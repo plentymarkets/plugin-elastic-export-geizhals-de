@@ -2,14 +2,14 @@
   "name": "ElasticExportGeizhalsDE",
   "namespace": "ElasticExportGeizhalsDE",
   "type": "export",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007",
   "pluginIcon": "icon_plugin_md.png",
   "price": 0.00,
   "description": "This plugin adds the format Geizhals.de to the Elastic Export.",
   "shortDescription": {
-    "de": "Das Plugin ElasticExportGeizhalsDE fügt das Datenformat GeizhalsDE-Plugin zum Elastischen Export hinzu.",
-    "en": "This plugin adds the format GeizhalsDE-Plugin to the Elastic Export."
+    "de": "Die Integration des Datenformats GeizhalsDE-Plugin ermöglicht die Artikeldatenübertragung zum Preisportal Geizhals.de über den elastischen Export.",
+    "en": "The integration of the data format GeizhalsDE-Plugin enables the transfer of item data to the price search engine Geizhals.de via the elastic export."
   },
   "categories": [
     "3523"
