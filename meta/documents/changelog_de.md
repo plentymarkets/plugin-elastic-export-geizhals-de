@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.0.11 (2018-02-16)
+
+### Geändert
+- Plugin-Kurzbeschreibung wurde angepasst.
+
 ## 1.0.10 (2017-11-01)
 
 ### Behoben
