@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.1.0 (2018-02-27)
+
+### Geändert
+- Es werden nun alle konfigurierten Versandkosten berücksichtigt.
+
 ## v1.0.11 (2018-02-16)
 
 ### Geändert

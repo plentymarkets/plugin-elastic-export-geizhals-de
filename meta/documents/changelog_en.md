@@ -1,5 +1,11 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.1.0 (2018-02-27)
+
+### Changed
+- All configured shipping costs will be considered.
+- Es werden nun alle Versandkosten berücksichtigt, nicht nur "Nachnahme" und "Vorkasse".
+
 ## v1.0.11 (2018-02-16)
 
 ### Changed
