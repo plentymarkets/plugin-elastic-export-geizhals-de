@@ -1,10 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
-## v1.1.0 (2018-02-27)
+## v1.1.0 (2018-02-28)
 
 ### Changed
 - All configured shipping costs will be considered.
-- Es werden nun alle Versandkosten berücksichtigt, nicht nur "Nachnahme" und "Vorkasse".
+- The filtration of the variation will now be handled by the class FiltrationService.
 
 ## v1.0.11 (2018-02-16)
 
