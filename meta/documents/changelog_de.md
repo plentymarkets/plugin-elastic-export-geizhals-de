@@ -3,8 +3,8 @@
 ## v1.1.0 (2018-02-28)
 
 ### Geändert
-- Es werden nun alle konfigurierten Versandkosten berücksichtigt.
-- Die Filtrierung der Varianten wird nun durch die Klasse FiltrationService vorgenommen.
+- Alle konfigurierten Versandkosten werden berücksichtigt.
+- Die Klasse FiltrationService übernimmt die Filtrierung der Varianten.
 
 ## v1.0.11 (2018-02-16)
 
