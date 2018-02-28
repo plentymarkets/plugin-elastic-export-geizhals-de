@@ -6,6 +6,7 @@ use ElasticExport\Helper\ElasticExportCoreHelper;
 use ElasticExport\Helper\ElasticExportPriceHelper;
 use ElasticExport\Helper\ElasticExportShippingHelper;
 use ElasticExport\Helper\ElasticExportStockHelper;
+use ElasticExport\Services\FiltrationService;
 use Plenty\Modules\DataExchange\Contracts\CSVPluginGenerator;
 use Plenty\Modules\Helper\Services\ArrayHelper;
 use Plenty\Modules\Helper\Models\KeyValue;
@@ -49,6 +50,21 @@ class GeizhalsDE extends CSVPluginGenerator
     private $arrayHelper;
 
 	/**
+	 * @var array
+	 */
+	private $paymentInAdvanceCache;
+
+	/**
+	 * @var array
+	 */
+	private $cashOnDeliveryCache;
+
+    /**
+     * @var FiltrationService
+     */
+    private $filtrationService;
+
+	/**
 	 * GeizhalsDE constructor.
      *
 	 * @param ArrayHelper $arrayHelper
@@ -68,14 +84,12 @@ class GeizhalsDE extends CSVPluginGenerator
     protected function generatePluginContent($elasticSearch, array $formatSettings = [], array $filter = [])
     {
     	$this->elasticExportStockHelper = pluginApp(ElasticExportStockHelper::class);
-
         $this->elasticExportCoreHelper = pluginApp(ElasticExportCoreHelper::class);
-
         $this->elasticExportPriceHelper = pluginApp(ElasticExportPriceHelper::class);
-        
         $this->elasticExportShippingHelper = pluginApp(ElasticExportShippingHelper::class);
 
         $settings = $this->arrayHelper->buildMapFromObjectList($formatSettings, 'key', 'value');
+        $this->filtrationService = pluginApp(FiltrationService::class, [$settings, $filter]);
 
         $this->setDelimiter(self::DELIMITER);
 
@@ -123,7 +137,7 @@ class GeizhalsDE extends CSVPluginGenerator
                         }
 
                         // If filtered by stock is set and stock is negative, then skip the variation
-                        if ($this->elasticExportStockHelper->isFilteredByStock($variation, $filter) === true)
+                        if ($this->filtrationService->filter($variation))
                         {
                             continue;
                         }
