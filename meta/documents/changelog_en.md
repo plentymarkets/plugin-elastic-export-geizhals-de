@@ -3,8 +3,8 @@
 ## v1.1.0 (2018-02-28)
 
 ### Changed
-- All configured shipping costs will be considered.
-- The filtration of the variation will now be handled by the class FiltrationService.
+- All configured shipping costs are considered.
+- The class FiltrationService filters all variations.
 
 ## v1.0.11 (2018-02-16)
 
