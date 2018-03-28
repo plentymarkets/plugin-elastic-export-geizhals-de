@@ -4,7 +4,7 @@
 
 ### Changed
 - All configured shipping costs are considered.
-- The class FiltrationService filters all variations.
+- The class FiltrationService is responsible for the filtration of all variations.
 
 ## v1.0.11 (2018-02-16)
 
