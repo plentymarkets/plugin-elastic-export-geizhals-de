@@ -5,6 +5,7 @@
 ### Geändert
 - Alle konfigurierten Versandkosten werden berücksichtigt.
 - Die Klasse FiltrationService übernimmt die Filtrierung der Varianten.
+- Vorschaubilder aktualisiert.
 
 ## v1.0.11 (2018-02-16)
 
