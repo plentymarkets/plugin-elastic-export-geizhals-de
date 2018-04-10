@@ -194,7 +194,7 @@ class GeizhalsDE extends CSVPluginGenerator
         	$header[] = $shippingHeader;
         }
         
-        return $header;
+        return array_unique($header);
     }
 
     /**
