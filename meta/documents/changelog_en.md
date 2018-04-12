@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.1.1 (2018-04-12)
+
+### Changed
+- Adjusted user guide.
+
 ## v1.1.0 (2018-03-28)
 
 ### Changed
