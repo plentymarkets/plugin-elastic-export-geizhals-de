@@ -1,9 +1,16 @@
 # Release Notes for Elastic Export Geizhals.de
 
-## v1.0.12 (2018-04-12)
+## v1.1.1 (2018-04-12)
 
 ### Changed
 - Adjusted user guide.
+
+## v1.1.0 (2018-03-28)
+
+### Changed
+- All configured shipping costs are considered.
+- The class FiltrationService is responsible for the filtration of all variations.
+- Preview images updated.
 
 ## v1.0.11 (2018-02-16)
 

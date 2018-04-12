@@ -1,9 +1,16 @@
 # Release Notes für Elastic Export Geizhals.de
 
-## v1.0.12 (2018-04-12)
+## v1.1.1 (2018-04-12)
 
 ### Geändert
 - Der User Guide wurde ergänzt.
+
+## v1.1.0 (2018-03-28)
+
+### Geändert
+- Alle konfigurierten Versandkosten werden berücksichtigt.
+- Die Klasse FiltrationService übernimmt die Filtrierung der Varianten.
+- Vorschaubilder aktualisiert.
 
 ## v1.0.11 (2018-02-16)
 
