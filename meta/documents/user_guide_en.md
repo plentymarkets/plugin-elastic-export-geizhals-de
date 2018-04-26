@@ -24,7 +24,7 @@ The following table lists details for settings, format settings and recommended 
 
 | **Setting**                                           | **Explanation** |
 | :---                                                  | :--- |
-| **Settings**                                          |
+| **Settings**                                          | |
 | **Name**                                              | Enter a name. The export format will be listed under this name in the overview within the **Exports** tab. |
 | **Type**                                              | Select the type **Item** from the drop-down list. |
 | **Format**                                            | Select **GeizhalsDE-Plugin**. |
@@ -52,6 +52,7 @@ The following table lists details for settings, format settings and recommended 
 | **Stockbuffer**                                       | This option does not affect this format. |
 | **Stock for variations without stock limitation**     | This option does not affect this format. |
 | **Stock for variations with no stock administration** | This option does not affect this format. |
+| **Live currency conversion**                          | Activate this option to convert the price into the currency of the selected country of delivery. The price has to be released for the corresponding currency. |
 | **Retail price**                                      | Select gross price or net price from the drop-down list. |
 | **Offer price**                                       | This option does not affect this format. |
 | **RRP**                                               | Activate to transfer the RRP. |
@@ -62,6 +63,7 @@ The following table lists details for settings, format settings and recommended 
 ## 3 Overview of available columns
 
 | **Column description** | **Explanation** |
+| :---                   | :--- |
 | **Herstellername**     | **Required**<br/> The **name of the manufacturer** of the item. The **external name** within **Settings » Items » Manufacturer** will be preferred if existing. |
 | **Produktcode**        | The **Variation-ID** of the variation. |
 | **Produktbezeichnung** | **Required**<br/> According to the format setting **Artikelname**. |

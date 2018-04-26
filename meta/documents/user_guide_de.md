@@ -24,7 +24,7 @@ In der folgenden Tabelle finden Sie Hinweise zu den einzelnen Formateinstellunge
 
 | **Einstellung**                                     | **Erläuterung** |
 | :---                                                | :--- |
-| **Einstellungen**                                   |
+| **Einstellungen**                                   | |
 | **Name**                                            | Name eingeben. Unter diesem Namen erscheint das Exportformat in der Übersicht im Tab **Exporte**. |
 | **Typ**                                             | Typ **Artikel** aus der Dropdown-Liste wählen. |
 | **Format**                                          | **GeizhalsDE-Plugin** wählen. |
@@ -52,6 +52,7 @@ In der folgenden Tabelle finden Sie Hinweise zu den einzelnen Formateinstellunge
 | **Bestandspuffer**                                  | Diese Option ist für dieses Format nicht relevant. |
 | **Bestand für Varianten ohne Bestandsbeschränkung** | Diese Option ist für dieses Format nicht relevant. |
 | **Bestand für Varianten ohne Bestandsführung**      | Diese Option ist für dieses Format nicht relevant. |
+| **Währung live umrechnen**                          | Aktivieren, damit der Preis je nach eingestelltem Lieferland in die Währung des Lieferlandes umgerechnet wird. Der Preis muss für die entsprechende Währung freigegeben sein. |
 | **Verkaufspreis**                                   | Brutto- oder Nettopreis aus der Dropdown-Liste wählen. |
 | **Angebotspreis**                                   | Diese Option ist für dieses Format nicht relevant. |
 | **UVP**                                             | Aktivieren, um den UVP zu übertragen. |
@@ -62,6 +63,7 @@ In der folgenden Tabelle finden Sie Hinweise zu den einzelnen Formateinstellunge
 ## 3 Verfügbare Spalten der Exportdatei
 
 | **Spaltenbezeichnung** | **Erläuterung** |
+| :---                   | :--- |
 | **Herstellername**     | **Pflichtfeld**<br/> Der **Hersteller** des Artikels. Der **Externe Name** unter **Einstellungen » Artikel » Hersteller** wird bevorzugt, wenn vorhanden. |
 | **Produktcode**        | Die **Varianten-ID** der Variante. |
 | **Produktbezeichnung** | **Pflichtfeld**<br/> Entsprechend der Formateinstellung **Artikelname**. |
