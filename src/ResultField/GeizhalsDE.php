@@ -45,7 +45,9 @@ class GeizhalsDE extends ResultFields
 
         $reference = $settings->get('referrerId') ? $settings->get('referrerId') : self::ALL_MARKET_REFERENCE;
 
-        $this->setOrderByList(['item.id', ElasticSearch::SORTING_ORDER_ASC]);
+		$this->setOrderByList([
+			'path' => 'item.id',
+			'order' => ElasticSearch::SORTING_ORDER_ASC]);
 
         $itemDescriptionFields = ['texts.urlPath', 'texts.lang'];
 
