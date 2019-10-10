@@ -10,22 +10,22 @@ Geizhals.de is an independent price comparison and information platform that spe
 
 By installing this plugin you will receive the export format **GeizhalsDE-Plugin**. Use this format to exchange data between plentymarkets and Geizhals.de. It is required to install the Plugin **Elastic Export** from the plentyMarketplace first before you can use the format **GeizhalsDE-Plugin** in plentymarkets.
 
-Once both plugins are installed, you can create the export format **GeizhalsDE-Plugin**. Refer to the [Elastic Export](https://knowledge.plentymarkets.com/en/basics/data-exchange/elastic-export) page of the manual for further details about the individual format settings.
+Once both plugins are installed, you can create the export format **GeizhalsDE-Plugin**. Refer to the [Elastic Export](https://knowledge.plentymarkets.com/en/data/exporting-data/elastic-export) page of the manual for further details about the individual format settings.
 
 Creating a new export format:
 
 1. Go to **Data » Elastic export**.
 2. Click on **New export**.
 3. Carry out the settings as desired. Pay attention to the information given in table 1.
-4. **Save** the settings.
-→ The export format will be given an ID and it will appear in the overview within the **Exports** tab.
+4. **Save** the settings.<br/>
+→ The export format is given an ID and it appears in the overview within the **Exports** tab.
 
 The following table lists details for settings, format settings and recommended item filters for the format **GeizhalsDE-Plugin**.
 
 | **Setting**                                           | **Explanation** |
 | :---                                                  | :--- |
 | **Settings**                                          | |
-| **Name**                                              | Enter a name. The export format will be listed under this name in the overview within the **Exports** tab. |
+| **Name**                                              | Enter a name. The export format is listed under this name in the overview within the **Exports** tab. |
 | **Type**                                              | Select the type **Item** from the drop-down list. |
 | **Format**                                            | Select **GeizhalsDE-Plugin**. |
 | **Limit**                                             | Enter a number. If you want to transfer more than 9,999 data records to the price search engine, then the output file will not be generated again for another 24 hours. This is to save resources. If more than 9,999 data records are necessary, the setting **Generate cache file** has to be active. |
@@ -39,8 +39,8 @@ The following table lists details for settings, format settings and recommended 
 | **Product URL**                                       | Choose wich URL should be transferred to the price comparison portal, the item’s URL or the variation’s URL. Variation SKUs can only be transferred in combination with the Ceres store. |
 | **Client**                                            | Select a client. This setting is used for the URL structure. |
 | **URL parameter**                                     | Enter a suffix for the product URL if this is required for the export. If you have activated the transfer option for the product URL further up, then this character string will be added to the product URL. |
-| **Order referrer**                                    | Choose the order referrer that should be assigned during the order import from the drop-down list. |
-| **Marketplace account**                               | Select the marketplace account from the drop-down list. The selected referrer is added to the product URL so that sales can be analysed later. |
+| **Order referrer**                                    | Choose the order referrer that should be assigned during the order import from the drop-down list. The selected referrer is added to the product URL so that sales can be analysed later. |
+| **Marketplace account**                               | Select the marketplace account from the drop-down list. |
 | **Language**                                          | Select the language from the drop-down list. |
 | **Item name**                                         | Select **Name 1**, **Name 2** or **Name 3**. These names are saved in the **Texts** tab of the item. Enter a number into the **Maximum number of characters (def. Text)** field if desired. This specifies how many characters should be exported for the item name. |
 | **Preview text**                                      | This option does not affect this format. |
@@ -58,21 +58,21 @@ The following table lists details for settings, format settings and recommended 
 | **RRP**                                               | Activate to transfer the RRP. |
 | **Shipping costs**                                    | Activate this option if you want to use the shipping costs that are saved in a configuration. If this option is activated, then you will be able to select the configuration and the payment method from the drop-down lists.<br/> Activate the option **Transfer flat rate shipping charge** if you want to use a fixed shipping charge. If this option is activated, a value has to be entered in the line underneath. |
 | **VAT note**                                          | This option does not affect this format. |
-| **Item availability**                                 | Activate the **overwrite** option and enter item availabilities into the fields **1** to **10**. The fields represent the IDs of the availabilities. This will overwrite the item availabilities that are saved in the menu **System » Item » Availability**. |
+| **Item availability**                                 | Activate the **overwrite** option and enter item availabilities into the fields **1** to **10**. The fields represent the IDs of the availabilities. This will overwrite the item availabilities that are saved in the menu **Setup » Item » Availability**. |
 
 ## 3 Overview of available columns
 
 | **Column description** | **Explanation** |
 | :---                   | :--- |
-| **Herstellername**     | **Required**<br/> The **name of the manufacturer** of the item. The **external name** within **Settings » Items » Manufacturer** will be preferred if existing. |
+| **Herstellername**     | **Required**<br/> The **name of the manufacturer** of the item. The **external name** within **Setup » Items » Manufacturer** is preferred if existing. |
 | **Produktcode**        | The **Variation-ID** of the variation. |
-| **Produktbezeichnung** | **Required**<br/> According to the format setting **Artikelname**. |
+| **Produktbezeichnung** | **Required**<br/> According to the format setting **Item name**. |
 | **Preis**              | **Required**<br/> The **sales price** of the variation. |
 | **Deeplink**           | **Required**<br/> The **URL path** of the item, depending on the chosen **client** in the format settings. |
 | **Versand Vorkasse**   | According to the format setting **Shipping costs** including **Payment in advance** costs. |
 | **Versand Nachnahme**  | According to the format setting **Shipping costs** including **Cash on delivery** costs. |
-| **Verfügbarkeit**      | **Required**<br/> The **name of the item availability** under **Settings » Item » Item availability** or the translation according to the format setting **Overwrite item availability**. |
-| **Herstellernummer**   | **Required**<br/> The **Model** within **Items » Edit item » Open item » Open variation » Settings » Basic settings**. |
+| **Verfügbarkeit**      | **Required**<br/> The **name of the item availability** under **Setup » Item » Item availability** or the translation according to the format setting **Overwrite item availability**. |
+| **Herstellernummer**   | **Required**<br/> The **Model** within **Item » Edit item » Open item » Open variation » Settings » Basic settings**. |
 | **EAN**                | **Required**<br/> According to the format setting **Barcode**. |
 | **Kategorie**          | The names of the categories that are linked to the variation, separated by ">". |
 | **Grundpreis**         | The **base price information**. The format is "price / unit". (Example: 10.00 EUR / kilogram) |
