@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.1.7 (2020-06-09)
+
+### Geändert
+- Die Plugin-Beschreibung wurde gelöscht und stattdessen ein Link zum plentymarkets Handbuch eingefügt.
+
 ## v1.1.6 (2019-10-10)
 
 ### Geändert
