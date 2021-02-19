@@ -2,11 +2,15 @@
 
 namespace ElasticExportGeizhalsDE;
 
+use ElasticExportGeizhalsDE\Catalog\Providers\CatalogBootServiceProvider;
+use ElasticExportGeizhalsDE\Crons\ExportCron;
+use Plenty\Modules\Cron\Services\CronContainer;
 use Plenty\Modules\DataExchange\Services\ExportPresetContainer;
 use Plenty\Plugin\ServiceProvider;
 
 /**
  * Class ElasticExportGeizhalsDEServiceProvider
+ *
  * @package ElasticExportGeizhalsDE
  */
 class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
@@ -18,7 +22,7 @@ class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->getApplication()->register(CatalogBootServiceProvider::class);
     }
 
     /**
@@ -26,15 +30,21 @@ class ElasticExportGeizhalsDEServiceProvider extends ServiceProvider
      *
      * @param ExportPresetContainer $container
      */
-    public function boot(ExportPresetContainer $container)
+//    public function boot(ExportPresetContainer $container)
+//    {
+//        $container->add(
+//            'GeizhalsDE-Plugin',
+//            'ElasticExportGeizhalsDE\ResultField\GeizhalsDE',
+//            'ElasticExportGeizhalsDE\Generator\GeizhalsDE',
+//            '',
+//            true,
+//            true,
+//        );
+//    }
+
+    public function boot(CronContainer $cronContainer)
     {
-        $container->add(
-            'GeizhalsDE-Plugin',
-            'ElasticExportGeizhalsDE\ResultField\GeizhalsDE',
-            'ElasticExportGeizhalsDE\Generator\GeizhalsDE',
-            '',
-            true,
-            true
-        );
+        // register crons
+        $cronContainer->add(CronContainer::EVERY_FIFTEEN_MINUTES, ExportCron::class);
     }
 }
