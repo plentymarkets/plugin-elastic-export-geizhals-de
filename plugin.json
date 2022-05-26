@@ -21,5 +21,7 @@
   "author": "plentysystems AG",
   "authorIcon": "icon_author_xs.png",
   "serviceProvider": "ElasticExportGeizhalsDE\\ElasticExportGeizhalsDEServiceProvider",
-  "require": ["ElasticExport"]
+  "require": {
+    "ElasticExport": ">= 1.6.6"
+  }
 }
