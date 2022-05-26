@@ -114,7 +114,7 @@ class GeizhalsDE extends CSVPluginGenerator
                 // Get the data from Elastic Search
                 $resultList = $elasticSearch->execute();
 
-                if(!is_null($resultList['error']) && count($resultList['error']) > 0)
+                if(!is_null($resultList['error']) && count($resultList['error'] ?? []) > 0)
                 {
                     $this->getLogger(__METHOD__)->error('ElasticExportGeizhalsDE::logs.occurredElasticSearchErrors', [
                         'Error message' => $resultList['error'],
@@ -123,7 +123,7 @@ class GeizhalsDE extends CSVPluginGenerator
                     break;
                 }
 
-                if(is_array($resultList['documents']) && count($resultList['documents']) > 0)
+                if(is_array($resultList['documents']) && count($resultList['documents'] ?? []) > 0)
                 {
                     $previousItemId = null;
 
