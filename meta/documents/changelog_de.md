@@ -1,5 +1,10 @@
 # Release Notes für Elastic Export Geizhals.de
 
+## v1.1.9 (2022-06-13)
+
+### Behoben
+- Ein fehlerhafter Link im User Guide wurde korrigiert.
+
 ## v1.1.8 (2022-05-26)
 
 ### Geändert
