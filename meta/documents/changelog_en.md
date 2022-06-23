@@ -1,5 +1,10 @@
 # Release Notes for Elastic Export Geizhals.de
 
+## v1.1.10 (2022-06-23)
+
+### Fixed
+- Fixed PHP8 error.
+
 ## v1.1.9 (2022-06-13)
 
 ### Fixed
