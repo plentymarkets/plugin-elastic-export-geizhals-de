@@ -223,7 +223,7 @@ class GeizhalsDE extends CSVPluginGenerator
                 'Herstellernummer'      => $variation['data']['variation']['model'],
                 'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
                 'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
-                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
+                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, (float)$priceList['price'], $settings->get('lang'), '/', false, true),
                 'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
             ];
             
