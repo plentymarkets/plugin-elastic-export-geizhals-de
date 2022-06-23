@@ -209,7 +209,7 @@ class GeizhalsDE extends CSVPluginGenerator
         $priceList = $this->elasticExportPriceHelper->getPriceList($variation, $settings, 2, ',');
 
         // Only variations with the Retail Price greater than zero will be handled
-        if(!is_null($priceList['price']) && $priceList['price'] > 0)
+        if(!is_null($priceList['price']) && (float)$priceList['price'] > 0)
         {
             $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
 
