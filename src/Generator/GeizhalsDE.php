@@ -209,7 +209,7 @@ class GeizhalsDE extends CSVPluginGenerator
         $priceList = $this->elasticExportPriceHelper->getPriceList($variation, $settings, 2, ',');
 
         // Only variations with the Retail Price greater than zero will be handled
-        if(!is_null($priceList['price']) && $priceList['price'] > 0)
+        if(!is_null($priceList['price']) && (float)$priceList['price'] > 0)
         {
             $variationName = $this->elasticExportCoreHelper->getAttributeValueSetShortFrontendName($variation, $settings);
 
@@ -223,7 +223,7 @@ class GeizhalsDE extends CSVPluginGenerator
                 'Herstellernummer'      => $variation['data']['variation']['model'],
                 'EAN'                   => $this->elasticExportCoreHelper->getBarcodeByType($variation, $settings->get('barcode')),
                 'Kategorie'             => $this->elasticExportCoreHelper->getCategory((int)$variation['data']['defaultCategories'][0]['id'], $settings->get('lang'), $settings->get('plentyId')),
-                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, $priceList['price'], $settings->get('lang'), '/', false, true),
+                'Grundpreis'            => $this->elasticExportPriceHelper->getBasePrice($variation, (float)$priceList['price'], $settings->get('lang'), '/', false, true),
                 'Beschreibung'          => $this->elasticExportCoreHelper->getMutatedDescription($variation, $settings),
             ];
             
